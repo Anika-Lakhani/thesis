@@ -1,0 +1,2 @@
+https://github.com/lxieyang/chrome-extension-boilerplate-react for chrome extension boilerplate
+https://github.com/polipy/polipy for privacy policy scraping
