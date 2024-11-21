@@ -1,5 +1,16 @@
 {
-  "dependencies": {
-    "polipy": "^1.0.0"
+  "name": "privacy-policy-analyzer",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.x.x",
+    "@babel/preset-env": "^7.x.x",
+    "babel-loader": "^8.x.x",
+    "webpack": "^5.x.x",
+    "webpack-cli": "^4.x.x"
   }
 }
