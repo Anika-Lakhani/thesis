@@ -1,1 +1,0 @@
-chrome.runtime.onMessage.addListener((function(e,n,t){return"analyze"===e.action&&t({text:document.body.innerText}),!0}));

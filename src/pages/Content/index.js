@@ -24,11 +24,20 @@ function findPrivacyPolicyLinks() {
   return policyLinks;
 }
 
-// Send found links to background script
+// Initial scan for privacy policies
 const policyLinks = findPrivacyPolicyLinks();
 if (policyLinks.length > 0) {
   chrome.runtime.sendMessage({
     type: 'PRIVACY_POLICY_DETECTED',
     payload: policyLinks
   });
-} 
+}
+
+// Listen for analysis requests from popup
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "analyze") {
+    const text = document.body.innerText;
+    sendResponse({ text });
+  }
+  return true;
+});
