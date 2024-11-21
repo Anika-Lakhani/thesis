@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   entry: {
     popup: './src/pages/Popup/index.jsx',
     contentScript: './src/pages/Content/index.js',
@@ -39,7 +40,10 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/manifest.json' },
-        { from: 'src/assets', to: 'assets' }
+        { from: 'src/assets/icon-16.png', to: 'icon-16.png' },
+        { from: 'src/assets/icon-48.png', to: 'icon-48.png' },
+        { from: 'src/assets/icon-128.png', to: 'icon-128.png' },
+        { from: 'src/assets/icon-34.png', to: 'icon-34.png' }
       ]
     })
   ],

@@ -33,19 +33,11 @@ const Popup = () => {
     setAnalysis(null);
 
     try {
-      // Send message to background script to scrape policy
-      chrome.runtime.sendMessage(
-        { type: 'SCRAPE_POLICY', url },
-        async (response) => {
-          if (response.success) {
-            const result = await chrome.storage.local.get(`policy-${url}`);
-            const policyData = result[`policy-${url}`];
-            await handleAnalyze(policyData.text);
-          } else {
-            setError(response.error || 'Failed to scrape policy');
-          }
-        }
-      );
+      // Get the policy text
+      const policyText = await fetch(url).then(res => res.text());
+      
+      // Analyze the policy
+      await handleAnalyze(policyText);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -116,4 +108,4 @@ const Popup = () => {
   );
 };
 
-export default Popup;
+export default Popup; 

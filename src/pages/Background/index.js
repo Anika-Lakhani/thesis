@@ -1,19 +1,14 @@
-import { get_policy } from 'polipy';
-
 // Listen for messages from content script
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'PRIVACY_POLICY_DETECTED') {
     handlePrivacyPolicyDetection(message.payload, sender.tab.id);
   } else if (message.type === 'SCRAPE_POLICY') {
     try {
-      const policy = await get_policy(message.url, {
-        screenshot: false,
-        timeout: 30,
-        extractors: ['text']
-      });
+      const response = await fetch(message.url);
+      const text = await response.text();
       
       chrome.storage.local.set({
-        [`policy-${message.url}`]: policy.to_dict()
+        [`policy-${message.url}`]: { text }
       });
 
       sendResponse({ success: true });
