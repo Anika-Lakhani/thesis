@@ -14,35 +14,10 @@ h2 {
   color: #1a73e8;
 }
 
-.policy-links ul {
-  list-style: none;
-  padding: 0;
-}
-
-.policy-links li {
-  margin: 8px 0;
-  padding: 8px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-}
-
-button {
-  background-color: #1a73e8;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
+.policy-links ul,
+.policy-links li,
 .analyze-button {
-  width: 100%;
-  margin-top: 8px;
+  display: none;
 }
 
 .analysis-results {
