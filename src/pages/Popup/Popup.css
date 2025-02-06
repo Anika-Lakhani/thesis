@@ -1,3 +1,54 @@
+/* Add CSS variables at the root */
+:root {
+  /* Light theme variables */
+  --background-color: #ffffff;
+  --text-color: #202124;
+  --border-color: #e0e0e0;
+  --button-bg: #f8f9fa;
+  --button-text: #202124;
+  --hover-bg: #f1f3f4;
+  --section-title-color: #202124;
+  --needle-color: #5f6368;
+  --risk-text-color: #202124;
+  --details-row-bg: #f8f9fa;
+  --risk-text-bg: rgba(255, 255, 255, 0.1);
+  --details-bg: #f8f9fa;
+  --details-text: #202124;
+  --details-warning-bg: #fff3e0;
+  --details-success-bg: #e8f5e9;
+  --details-border: #e0e0e0;
+  background-color: transparent !important;
+}
+
+/* Style the html and body */
+html, body {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  background: transparent !important;
+}
+
+[data-theme="dark"] {
+  --background-color: #202124;
+  --text-color: #e8eaed;
+  --border-color: #5f6368;
+  --button-bg: #3c4043;
+  --button-text: #e8eaed;
+  --hover-bg: #202124;
+  --section-title-color: #e8eaed;
+  --needle-color: #e8eaed;
+  --risk-text-color: #e8eaed;
+  --details-row-bg: #3c4043;
+  --details-bg: #2c2c2c;
+  --details-text: #e8eaed;
+  --details-warning-bg: rgba(255, 167, 38, 0.15);
+  --details-success-bg: rgba(76, 175, 80, 0.15);
+  --details-border: #3c4043;
+}
+
 .popup-container {
   min-width: 400px;
   max-width: 600px;
@@ -7,11 +58,30 @@
   max-height: 600px;
   overflow-y: auto;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  border-radius: 16px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  box-shadow: none;
+}
+
+h2:first-of-type {
+  margin-right: 100px;
+  color: #1a73e8;
 }
 
 h2 {
   margin-top: 0;
   color: #1a73e8;
+  font-size: var(--font-size-h2, 20px);
+}
+
+h3 {
+  font-size: var(--font-size-h3, 16px);
+}
+
+p {
+  font-size: var(--font-size-p, 14px);
 }
 
 .policy-links ul,
@@ -47,11 +117,14 @@ h2 {
 }
 
 .error-message {
-  color: #d93025;
-  margin: 8px 0;
-  padding: 8px;
-  background-color: #fce8e6;
-  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  text-align: center;
+  color: var(--text-color);
+  font-size: 16px;
+  padding: 20px;
 }
 
 .findings ul {
@@ -136,11 +209,14 @@ h2 {
 
 .risk-explanation {
   margin: 20px;
-  padding: 15px;
-  background-color: #f8f9fa;
+  padding: 16px;
+  background-color: var(--risk-text-bg);
   border-radius: 8px;
   font-size: 14px;
   line-height: 1.5;
+  color: var(--risk-text-color);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .track-button {
@@ -191,6 +267,10 @@ h2 {
   border-radius: 8px;
   font-size: 14px;
   line-height: 1.4;
+  background-color: var(--details-bg);
+  color: var(--details-text);
+  border: 1px solid var(--details-border);
+  margin-bottom: 8px;
 }
 
 .detail-icon {
@@ -200,4 +280,196 @@ h2 {
 
 .detail-text {
   flex: 1;
+}
+
+.popup-header-controls {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.header-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #5f6368;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.header-button:hover {
+  background-color: #f1f3f4;
+  color: #1a73e8;
+}
+
+.header-button i {
+  font-size: 20px;
+}
+
+/* Accessibility menu styles */
+.accessibility-wrapper {
+  position: relative;
+}
+
+.accessibility-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  width: 320px;
+  z-index: 1000;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.accessibility-menu h2 {
+  margin-top: 0;
+  color: #1a73e8;
+}
+
+.accessibility-section {
+  margin-bottom: 16px;
+}
+
+.accessibility-section h3 {
+  margin: 0 0 8px 0;
+  color: var(--section-title-color);
+}
+
+.font-size-controls,
+.playback-speed-controls,
+.view-mode-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.font-size-button,
+.speed-button,
+.view-mode-button {
+  flex: 1;
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--button-bg);
+  cursor: pointer;
+  color: var(--button-text);
+}
+
+.font-size-button:hover,
+.speed-button:hover,
+.view-mode-button:hover {
+  background-color: var(--hover-bg);
+}
+
+.font-size-button.active,
+.speed-button.active,
+.view-mode-button.active {
+  background-color: #1a73e8;
+  color: white;
+  border-color: #1a73e8;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.keyboard-tips {
+  margin-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 16px;
+}
+
+.keyboard-tips p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5f6368;
+}
+
+/* Risk meter needle */
+.risk-meter .needle {
+  background-color: var(--needle-color) !important;
+}
+
+/* Details tab specific styles */
+.details-row.warning {
+  background-color: var(--details-warning-bg);
+}
+
+.details-row.success {
+  background-color: var(--details-success-bg);
+}
+
+/* Make icons more visible in dark mode */
+[data-theme="dark"] .details-row .icon {
+  opacity: 0.9;
+}
+
+/* Ensure text remains readable */
+.details-row p,
+.details-row h3,
+.details-row span {
+  color: var(--details-text);
+}
+
+/* Light theme colors */
+.details-row {
+  background-color: #f8f9fa;
+  color: #202124;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 8px;
+}
+
+/* Warning rows (with exclamation mark) in light theme */
+.details-row.warning {
+  background-color: #fff3e0;
+}
+
+/* Success rows (with thumbs up) in light theme */
+.details-row.success {
+  background-color: #e8f5e9;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] .details-row {
+  background-color: #2c2c2c !important;
+  color: #e8eaed !important;
+}
+
+[data-theme="dark"] .details-row.warning {
+  background-color: #3c3024 !important;
+}
+
+[data-theme="dark"] .details-row.success {
+  background-color: #233427 !important;
+}
+
+/* Ensure text is visible in dark mode */
+[data-theme="dark"] .details-row p,
+[data-theme="dark"] .details-row h3,
+[data-theme="dark"] .details-row span {
+  color: #e8eaed !important;
 }

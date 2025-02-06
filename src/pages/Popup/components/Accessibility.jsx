@@ -1,142 +1,113 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWheelchair, faMoon, faSun, faDesktop, faLaptop } from '@fortawesome/free-solid-svg-icons';
 import { useAccessibility } from '../context/AccessibilityContext';
 
 const Accessibility = () => {
-  const { theme, setTheme, fontSize, setFontSize } = useAccessibility();
-  const [isOpen, setIsOpen] = useState(false);
-  const accessibilityRef = useRef(null);
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Escape') {
-      setIsOpen(false);
-    }
-  };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { fontSize, setFontSize, theme, setTheme } = useAccessibility();
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (accessibilityRef.current && !accessibilityRef.current.contains(event.target)) {
-        setIsOpen(false);
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-    }
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+  };
 
   return (
-    <div className="accessibility-container" ref={accessibilityRef}>
+    <div className="accessibility-wrapper" ref={menuRef}>
       <button 
-        className="accessibility-button" 
-        onClick={() => setIsOpen(!isOpen)}
+        className="header-button accessibility-button" 
         aria-label="Accessibility options"
-        tabIndex={0}
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-expanded={isMenuOpen}
       >
-        <i className="fas fa-wheelchair"></i>
+        <FontAwesomeIcon icon={faWheelchair} />
       </button>
 
-      {isOpen && (
-        <div className="accessibility-menu" role="menu">
+      {isMenuOpen && (
+        <div className="accessibility-menu">
           <h2>Accessibility Options</h2>
           
-          <div className="accessibility-section">
+          <section className="accessibility-section">
             <h3>Font Size</h3>
-            <div className="button-group" role="radiogroup">
-              <button 
-                className={`setting-option ${fontSize === 'small' ? 'active' : ''}`}
-                onClick={() => setFontSize('small')}
-                style={{ fontSize: '14px' }}
-              >
-                Aa
-              </button>
-              <button 
-                className={`setting-option ${fontSize === 'medium' ? 'active' : ''}`}
-                onClick={() => setFontSize('medium')}
-                style={{ fontSize: '16px' }}
-              >
-                Aa
-              </button>
-              <button 
-                className={`setting-option ${fontSize === 'large' ? 'active' : ''}`}
-                onClick={() => setFontSize('large')}
-                style={{ fontSize: '18px' }}
-              >
-                Aa
-              </button>
+            <div className="font-size-controls">
+              {['small', 'medium', 'large'].map((size) => (
+                <button
+                  key={size}
+                  className={`font-size-button ${fontSize === size ? 'active' : ''}`}
+                  onClick={() => setFontSize(size)}
+                  style={{ fontSize: size === 'small' ? '14px' : size === 'medium' ? '16px' : '18px' }}
+                >
+                  Aa
+                </button>
+              ))}
             </div>
-          </div>
+          </section>
 
-          <div className="accessibility-section">
+          <section className="accessibility-section">
             <label className="checkbox-label">
               <input type="checkbox" />
               <span>Use dyslexia-friendly font</span>
             </label>
-          </div>
+          </section>
 
-          <div className="accessibility-section">
+          <section className="accessibility-section">
             <label className="checkbox-label">
               <input type="checkbox" />
               <span>Always automatically play auditory explanations</span>
             </label>
-          </div>
+          </section>
 
-          <div className="accessibility-section">
+          <section className="accessibility-section">
             <h3>Audio playback speed</h3>
-            <div className="button-group">
-              <button className="setting-option">slow</button>
-              <button className="setting-option active">regular</button>
-              <button className="setting-option">fast</button>
+            <div className="playback-speed-controls">
+              <button className={`speed-button`}>slow</button>
+              <button className={`speed-button active`}>regular</button>
+              <button className={`speed-button`}>fast</button>
             </div>
-          </div>
+          </section>
 
-          <div className="accessibility-section">
+          <section className="accessibility-section">
             <h3>Viewing mode</h3>
-            <div className="button-group" role="radiogroup">
+            <div className="view-mode-controls">
               <button 
-                className={`setting-option ${theme === 'dark' ? 'active' : ''}`}
-                onClick={() => setTheme('dark')}
-                tabIndex={0}
-                role="radio"
-                aria-checked={theme === 'dark'}
+                className={`view-mode-button ${theme === 'dark' ? 'active' : ''}`}
+                onClick={() => handleThemeChange('dark')}
                 aria-label="Dark mode"
               >
-                <i className="fas fa-moon"></i>
+                <FontAwesomeIcon icon={faMoon} />
               </button>
               <button 
-                className={`setting-option ${theme === 'light' ? 'active' : ''}`}
-                onClick={() => setTheme('light')}
-                tabIndex={0}
-                role="radio"
-                aria-checked={theme === 'light'}
+                className={`view-mode-button ${theme === 'light' ? 'active' : ''}`}
+                onClick={() => handleThemeChange('light')}
                 aria-label="Light mode"
               >
-                <i className="fas fa-sun"></i>
+                <FontAwesomeIcon icon={faSun} />
               </button>
               <button 
-                className={`setting-option ${theme === 'system' ? 'active' : ''}`}
-                onClick={() => setTheme('system')}
-                tabIndex={0}
-                role="radio"
-                aria-checked={theme === 'system'}
+                className={`view-mode-button ${theme === 'system' ? 'active' : ''}`}
+                onClick={() => handleThemeChange('system')}
                 aria-label="System mode"
               >
-                <i className="fas fa-desktop"></i>
+                <FontAwesomeIcon icon={faLaptop} />
               </button>
             </div>
-          </div>
+          </section>
 
-          <div className="accessibility-section keyboard-tips">
+          <section className="accessibility-section keyboard-tips">
             <h3>Keyboard Navigation Tips</h3>
             <p>Use the Tab key to navigate through interactive elements. Press Enter or Space to activate buttons and toggle checkboxes. Use arrow keys to adjust values where applicable.</p>
-          </div>
+          </section>
         </div>
       )}
     </div>
