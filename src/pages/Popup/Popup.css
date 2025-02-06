@@ -1,6 +1,11 @@
 .popup-container {
-  width: 400px;
+  min-width: 400px;
+  max-width: 600px;
+  width: fit-content;
   padding: 16px;
+  height: fit-content;
+  max-height: 600px;
+  overflow-y: auto;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -81,4 +86,143 @@ button:disabled {
 
 .findings li {
   margin: 4px 0;
+}
+
+.tabs-container {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.tabs-header {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+}
+
+.tab-button {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #5f6368;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab-button.active {
+  color: #1a73e8;
+  border-bottom: 2px solid #1a73e8;
+}
+
+.tab-button:hover {
+  background-color: #f8f9fa;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.risk-meter {
+  width: 200px;
+  height: 100px;
+  margin: 20px auto;
+  position: relative;
+}
+
+.risk-meter svg {
+  width: 100%;
+  height: 100%;
+}
+
+.risk-meter-path {
+  fill: none;
+  stroke-width: 20;
+  stroke-linecap: round;
+}
+
+.risk-meter-background {
+  stroke: #e0e0e0;
+}
+
+.risk-meter-value {
+  stroke-dasharray: 180;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.risk-meter-needle {
+  transform-origin: center 80%;
+  transition: transform 0.5s ease;
+}
+
+.risk-explanation {
+  margin: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.track-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.track-button:hover {
+  background-color: #1557b0;
+}
+
+.track-button i {
+  font-size: 16px;
+}
+
+.risk-assessment {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.risk-title {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #1a73e8;
+}
+
+.policy-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.detail-icon {
+  margin-right: 12px;
+  font-size: 20px;
+}
+
+.detail-text {
+  flex: 1;
 }
