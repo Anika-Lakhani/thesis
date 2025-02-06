@@ -1,3 +1,6 @@
+import { createFloatingIcon } from './FloatingIcon';
+import './content.styles.css';
+
 const PRIVACY_POLICY_PATTERNS = [
   /privacy\s*policy/i,
   /privacy/i,
@@ -40,7 +43,7 @@ function getSiteName() {
   return siteName;
 }
 
-function findPrivacyPolicy() {
+const findPrivacyPolicy = () => {
   const links = document.getElementsByTagName('a');
   let hasPrivacyPolicy = false;
   
@@ -62,11 +65,12 @@ function findPrivacyPolicy() {
   }
 
   return [];
-}
+};
 
 // Initial scan for privacy policy
 const policyLinks = findPrivacyPolicy();
 if (policyLinks.length > 0) {
+  // createFloatingIcon();
   chrome.runtime.sendMessage({
     type: 'PRIVACY_POLICY_DETECTED',
     payload: policyLinks

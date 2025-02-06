@@ -1,6 +1,9 @@
 import React from 'react';
+import { useAccessibility } from '../context/AccessibilityContext';
 
 const RiskMeter = ({ riskLevel }) => {
+  const { getTheme } = useAccessibility();
+  
   const getRiskAngle = () => {
     switch (riskLevel.toLowerCase()) {
       case 'low': return -60;
@@ -17,6 +20,10 @@ const RiskMeter = ({ riskLevel }) => {
       case 'high': return '#EA4335';
       default: return '#FBBC05';
     }
+  };
+
+  const getNeedleColor = () => {
+    return getTheme() === 'dark' ? '#ffffff' : '#333333';
   };
 
   return (
@@ -38,12 +45,12 @@ const RiskMeter = ({ riskLevel }) => {
             y1="100"
             x2="100"
             y2="50"
-            stroke="#333"
+            stroke={getNeedleColor()}
             strokeWidth="2"
             className="risk-meter-needle"
             style={{ transform: `rotate(${getRiskAngle()}deg)` }}
           />
-          <circle cx="100" cy="100" r="5" fill="#333" />
+          <circle cx="100" cy="100" r="5" fill={getNeedleColor()} />
         </svg>
       </div>
     </div>
