@@ -17,6 +17,7 @@
   --details-warning-bg: #fff3e0;
   --details-success-bg: #e8f5e9;
   --details-border: #e0e0e0;
+  --font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: transparent !important;
 }
 
@@ -57,7 +58,7 @@ html, body {
   height: fit-content;
   max-height: 600px;
   overflow-y: auto;
-  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-family);
   border-radius: 16px;
   background-color: var(--background-color);
   color: var(--text-color);
@@ -472,4 +473,36 @@ p {
 [data-theme="dark"] .details-row h3,
 [data-theme="dark"] .details-row span {
   color: #e8eaed !important;
+}
+
+/* Import OpenDyslexic font */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('chrome-extension://__MSG_@@extension_id__/fonts/OpenDyslexic-Regular.woff2') format('woff2'),
+       url('chrome-extension://__MSG_@@extension_id__/fonts/OpenDyslexic-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('chrome-extension://__MSG_@@extension_id__/fonts/OpenDyslexic-Bold.woff2') format('woff2'),
+       url('chrome-extension://__MSG_@@extension_id__/fonts/OpenDyslexic-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Ensure all text elements use the font variable */
+h1, h2, h3, h4, h5, h6, p, span, div, button {
+  font-family: var(--font-family);
+}
+
+[data-dyslexic-font="true"] {
+  --font-family: 'OpenDyslexic', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* Update the font-family variable when dyslexic font is enabled */
+.popup-container,
+.popup-container * {
+  font-family: var(--font-family);
 }

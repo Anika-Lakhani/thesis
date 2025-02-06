@@ -28,6 +28,13 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.(woff|woff2)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext]'
+        }
       }
     ]
   },
@@ -43,7 +50,15 @@ module.exports = {
         { from: 'src/assets/icon-16.png', to: 'icon-16.png' },
         { from: 'src/assets/icon-48.png', to: 'icon-48.png' },
         { from: 'src/assets/icon-128.png', to: 'icon-128.png' },
-        { from: 'src/assets/icon-34.png', to: 'icon-34.png' }
+        { from: 'src/assets/icon-34.png', to: 'icon-34.png' },
+        { 
+          from: 'public/fonts/OpenDyslexic-Regular.woff2',
+          to: 'fonts/OpenDyslexic-Regular.woff2'
+        },
+        { 
+          from: 'public/fonts/OpenDyslexic-Regular.woff',
+          to: 'fonts/OpenDyslexic-Regular.woff'
+        }
       ]
     })
   ],

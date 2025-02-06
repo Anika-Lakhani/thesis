@@ -5,7 +5,14 @@ import { useAccessibility } from '../context/AccessibilityContext';
 
 const Accessibility = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { fontSize, setFontSize, theme, setTheme } = useAccessibility();
+  const { 
+    fontSize, 
+    setFontSize, 
+    theme, 
+    setTheme,
+    useDyslexicFont,
+    setUseDyslexicFont 
+  } = useAccessibility();
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -21,6 +28,10 @@ const Accessibility = () => {
 
   const handleThemeChange = (newTheme) => {
     setTheme(newTheme);
+  };
+
+  const handleDyslexicFontToggle = (event) => {
+    setUseDyslexicFont(event.target.checked);
   };
 
   return (
@@ -56,8 +67,12 @@ const Accessibility = () => {
 
           <section className="accessibility-section">
             <label className="checkbox-label">
-              <input type="checkbox" />
-              <span>Use dyslexia-friendly font</span>
+              <input
+                type="checkbox"
+                checked={useDyslexicFont}
+                onChange={handleDyslexicFontToggle}
+              />
+              Use dyslexia-friendly font
             </label>
           </section>
 

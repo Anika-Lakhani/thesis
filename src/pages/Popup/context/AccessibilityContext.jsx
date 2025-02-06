@@ -3,14 +3,20 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 const AccessibilityContext = createContext();
 
 export const AccessibilityProvider = ({ children }) => {
+  const [fontSize, setFontSize] = useState('regular');
+  const [useDyslexicFont, setUseDyslexicFont] = useState(false);
+  const [autoPlayAudio, setAutoPlayAudio] = useState(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState('regular');
   const [theme, setTheme] = useState('system');
-  const [fontSize, setFontSize] = useState('small');
 
   // Load saved settings on mount
   useEffect(() => {
-    chrome.storage.sync.get(['theme', 'fontSize'], (result) => {
+    chrome.storage.sync.get(['theme', 'fontSize', 'useDyslexicFont', 'autoPlayAudio', 'playbackSpeed'], (result) => {
       if (result.theme) setTheme(result.theme);
       if (result.fontSize) setFontSize(result.fontSize);
+      if (result.useDyslexicFont) setUseDyslexicFont(result.useDyslexicFont);
+      if (result.autoPlayAudio) setAutoPlayAudio(result.autoPlayAudio);
+      if (result.playbackSpeed) setPlaybackSpeed(result.playbackSpeed);
     });
   }, []);
 
@@ -47,7 +53,7 @@ export const AccessibilityProvider = ({ children }) => {
         h3: '16px',
         p: '14px'
       },
-      medium: {
+      regular: {
         base: '16px',
         h2: '24px',
         h3: '18px',
@@ -62,16 +68,27 @@ export const AccessibilityProvider = ({ children }) => {
     };
 
     const root = document.documentElement;
-    const sizes = fontSizes[fontSize];
+    const selectedSize = fontSizes[fontSize] || fontSizes.regular;
     
-    root.style.setProperty('--font-size-base', sizes.base);
-    root.style.setProperty('--font-size-h2', sizes.h2);
-    root.style.setProperty('--font-size-h3', sizes.h3);
-    root.style.setProperty('--font-size-p', sizes.p);
+    root.style.setProperty('--font-size-base', selectedSize.base);
+    root.style.setProperty('--font-size-h2', selectedSize.h2);
+    root.style.setProperty('--font-size-h3', selectedSize.h3);
+    root.style.setProperty('--font-size-p', selectedSize.p);
     
     // Save to storage
     chrome.storage.sync.set({ fontSize });
   }, [fontSize]);
+
+  // Apply font changes
+  useEffect(() => {
+    const root = document.documentElement;
+    if (useDyslexicFont) {
+      root.setAttribute('data-dyslexic-font', 'true');
+    } else {
+      root.removeAttribute('data-dyslexic-font');
+    }
+    chrome.storage.sync.set({ useDyslexicFont });
+  }, [useDyslexicFont]);
 
   // Save settings whenever they change
   const updateTheme = (newTheme) => {
@@ -101,10 +118,16 @@ export const AccessibilityProvider = ({ children }) => {
   };
 
   const value = {
-    theme,
-    setTheme,
     fontSize,
     setFontSize,
+    useDyslexicFont,
+    setUseDyslexicFont,
+    autoPlayAudio,
+    setAutoPlayAudio,
+    playbackSpeed,
+    setPlaybackSpeed,
+    theme,
+    setTheme,
     getFontSizeValue,
     getTheme,
   };
