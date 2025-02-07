@@ -199,12 +199,11 @@ p {
 }
 
 .risk-meter-value {
-  stroke-dasharray: 180;
   transition: stroke-dashoffset 0.5s ease;
 }
 
 .risk-meter-needle {
-  transform-origin: center 80%;
+  transform-origin: 100px 100px;
   transition: transform 0.5s ease;
 }
 
@@ -505,4 +504,11 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
 .popup-container,
 .popup-container * {
   font-family: var(--font-family);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] .risk-meter-needle,
+[data-theme="dark"] .risk-meter circle {
+  stroke: #e8eaed;
+  fill: #e8eaed;
 }

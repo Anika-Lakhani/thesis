@@ -1,21 +1,42 @@
 import React from 'react';
 
 const RiskMeter = ({ riskLevel }) => {
-  const getRiskAngle = () => {
-    switch (riskLevel.toLowerCase()) {
-      case 'low': return -60;
-      case 'medium': return 0;
-      case 'high': return 60;
-      default: return 0;
+  // Keep needle calculations the same
+  const getNeedleValue = (level) => {
+    switch (level.toLowerCase()) {
+      case 'low': return 0.2;
+      case 'medium': return 0.5;
+      case 'high': return 0.8;
+      default: return 0.5;
     }
   };
 
-  const getRiskColor = () => {
-    switch (riskLevel.toLowerCase()) {
-      case 'low': return '#34A853';
-      case 'medium': return '#FBBC05';
-      case 'high': return '#EA4335';
-      default: return '#FBBC05';
+  const getArcValue = (level) => {
+    switch (level.toLowerCase()) {
+      case 'low': return 0.2;
+      case 'medium': return 0.65;
+      case 'high': return 0.8;
+      default: return 0.5;
+    }
+  };
+
+  const needleValue = getNeedleValue(riskLevel);
+  const arcValue = getArcValue(riskLevel);
+  
+  // Needle angle calculation
+  const needleAngle = -90 + (180 * needleValue);
+  
+  // Arc calculations
+  const arcLength = 188.5;
+  const dashOffset = arcLength * (1 - arcValue);
+
+  // Get color based on risk level
+  const getColor = (level) => {
+    switch (level.toLowerCase()) {
+      case 'low': return '#188038';
+      case 'medium': return '#fbbc05';
+      case 'high': return '#d93025';
+      default: return '#fbbc05';
     }
   };
 
@@ -24,15 +45,24 @@ const RiskMeter = ({ riskLevel }) => {
       <h2 className="risk-title">Risk Level: {riskLevel}</h2>
       <div className="risk-meter">
         <svg viewBox="0 0 200 120">
+          {/* Background arc */}
           <path
             d="M20 100 A 60 60 0 0 1 180 100"
             className="risk-meter-path risk-meter-background"
           />
+          
+          {/* Colored arc */}
           <path
             d="M20 100 A 60 60 0 0 1 180 100"
             className="risk-meter-path risk-meter-value"
-            style={{ stroke: getRiskColor() }}
+            style={{
+              stroke: getColor(riskLevel),
+              strokeDasharray: arcLength,
+              strokeDashoffset: dashOffset
+            }}
           />
+          
+          {/* Needle */}
           <line
             x1="100"
             y1="100"
@@ -41,8 +71,11 @@ const RiskMeter = ({ riskLevel }) => {
             stroke="#333"
             strokeWidth="2"
             className="risk-meter-needle"
-            style={{ transform: `rotate(${getRiskAngle()}deg)` }}
+            style={{
+              transform: `rotate(${needleAngle}deg)`
+            }}
           />
+          
           <circle cx="100" cy="100" r="5" fill="#333" />
         </svg>
       </div>
