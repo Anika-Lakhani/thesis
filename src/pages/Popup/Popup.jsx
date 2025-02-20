@@ -14,6 +14,7 @@ import {
   faSun, 
   faDesktop 
 } from '@fortawesome/free-solid-svg-icons';
+import Settings from './components/Settings';
 
 const Popup = () => {
   const [loading, setLoading] = useState(false);
@@ -49,13 +50,7 @@ const Popup = () => {
       <div className="popup-container">
         <h2>OwlGuard</h2>
         <div className="popup-header-controls">
-          <button 
-            className="header-button settings-button" 
-            aria-label="Settings"
-            onClick={() => console.log('Settings clicked')}
-          >
-            <FontAwesomeIcon icon={faCog} />
-          </button>
+          <Settings />
           <Accessibility />
           <button 
             className="header-button close-button" 

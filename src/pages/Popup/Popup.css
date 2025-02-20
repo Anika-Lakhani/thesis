@@ -64,6 +64,7 @@ html, body {
   color: var(--text-color);
   margin: 0;
   box-shadow: none;
+  position: relative;
 }
 
 h2:first-of-type {
@@ -511,4 +512,113 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
 [data-theme="dark"] .risk-meter circle {
   stroke: #e8eaed;
   fill: #e8eaed;
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid #1a73e8;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Settings menu specific styles */
+.settings-wrapper {
+  position: relative;
+}
+
+.settings-menu {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--background-color, white);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  width: 320px;
+  z-index: 1000;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.settings-menu h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--text-color);
+  font-size: 18px;
+}
+
+.settings-section {
+  margin-bottom: 20px;
+}
+
+.settings-section h3 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.settings-section p {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: var(--text-secondary-color, #5f6368);
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.setting-option {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: none;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.setting-option:hover {
+  background-color: var(--hover-color, #f1f3f4);
+}
+
+.setting-option.active {
+  background-color: #1a73e8;
+  color: white;
+  border-color: #1a73e8;
+}
+
+.preferences-link {
+  display: block;
+  margin-top: 16px;
+  color: #1a73e8;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.preferences-link:hover {
+  text-decoration: underline;
+}
+
+/* Add a backdrop for the settings menu */
+.settings-wrapper::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+.settings-wrapper.open::before {
+  display: block;
 }
