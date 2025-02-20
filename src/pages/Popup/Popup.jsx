@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import JsPolipy from '../../utils/jsPolipy';
 import './Popup.css';
+import OnboardingForm from './components/OnboardingForm';
 import RiskMeter from './components/RiskMeter';
 import PolicyDetails from './components/PolicyDetails';
 import Accessibility from './components/Accessibility';
@@ -17,10 +18,24 @@ import {
 import Settings from './components/Settings';
 
 const Popup = () => {
+  const [showOnboarding, setShowOnboarding] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [activeTab, setActiveTab] = useState('summary');
+
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        const result = await chrome.storage.sync.get(["onboardingComplete"]);
+        setShowOnboarding(!result.onboardingComplete);
+      } catch (error) {
+        console.error("Error checking onboarding status:", error);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, []);
 
   useEffect(() => {
     // Automatically analyze when popup opens
@@ -44,6 +59,14 @@ const Popup = () => {
       }
     });
   }, []);
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+  };
+
+  if (showOnboarding) {
+    return <OnboardingForm onComplete={handleOnboardingComplete} />;
+  }
 
   return (
     <AccessibilityProvider>
