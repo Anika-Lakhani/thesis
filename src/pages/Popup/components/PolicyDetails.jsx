@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAccessibility } from '../context/AccessibilityContext';
+import TextToSpeech from './TextToSpeech';
 
 const PolicyDetails = ({ analysis }) => {
-  const { theme } = useAccessibility();
+  const { theme, autoPlayAudio } = useAccessibility();
   
   // Sort categories by importance
   const sortedCategories = Object.entries(analysis).sort((a, b) => {
@@ -55,8 +56,28 @@ const PolicyDetails = ({ analysis }) => {
     return messages[category] || `${category} policies detected`;
   };
 
+  const getAudioContent = () => {
+    return sortedCategories
+      .filter(([_, data]) => data.findings.length > 0)
+      .map(([category, data]) => getCategoryMessage(category, data.findings))
+      .join(". ");
+  };
+
+  // Add CSS for the speaker button
+  const speakerStyles = {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    zIndex: 1
+  };
+
   return (
-    <div className="policy-details">
+    <div className="policy-details" style={{ position: 'relative' }}>
+      <TextToSpeech 
+        text={getAudioContent()}
+        autoPlay={autoPlayAudio}
+        style={speakerStyles}
+      />
       {sortedCategories.map(([category, data]) => (
         data.findings.length > 0 && (
           <div 

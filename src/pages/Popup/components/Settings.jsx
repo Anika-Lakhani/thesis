@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { useAccessibility } from "../context/AccessibilityContext";
+import TextToSpeech from "./TextToSpeech";
 
 const Settings = () => {
   const [isOpen, setIsOpen] = useState(false);
   const settingsRef = useRef(null);
   const [selectedReadingLevel, setSelectedReadingLevel] = useState('medium');
   const [selectedFormat, setSelectedFormat] = useState('default');
+  const { autoPlayAudio } = useAccessibility();
 
   // Handle click outside
   useEffect(() => {
@@ -75,8 +78,25 @@ const Settings = () => {
   const readingLevels = ['simple', 'medium', 'advanced'];
   const explanationFormats = ['default', 'girlypop', 'surfer dude', 'sports announcer'];
 
+  const getAudioContent = () => {
+    return `Settings page. 
+      Current explanation format is ${selectedFormat}. 
+      You can choose between ${explanationFormats.join(", ")} formats.
+      Click the preferences link below to update your usage preferences.`;
+  };
+
   return (
     <div className="settings-wrapper" ref={settingsRef}>
+      <TextToSpeech 
+        text={getAudioContent()}
+        autoPlay={autoPlayAudio}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          zIndex: 1000
+        }}
+      />
       <button 
         className="header-button settings-button" 
         onClick={() => setIsOpen(!isOpen)}

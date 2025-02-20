@@ -5,7 +5,8 @@ import OnboardingForm from './components/OnboardingForm';
 import RiskMeter from './components/RiskMeter';
 import PolicyDetails from './components/PolicyDetails';
 import Accessibility from './components/Accessibility';
-import { AccessibilityProvider } from './context/AccessibilityContext';
+import TextToSpeech from './components/TextToSpeech';
+import { AccessibilityProvider, useAccessibility } from './context/AccessibilityContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCog, 
@@ -23,6 +24,7 @@ const Popup = () => {
   const [error, setError] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [activeTab, setActiveTab] = useState('summary');
+  const { autoPlayAudio } = useAccessibility();
 
   useEffect(() => {
     const checkOnboardingStatus = async () => {
@@ -60,12 +62,8 @@ const Popup = () => {
     });
   }, []);
 
-  const handleOnboardingComplete = () => {
-    setShowOnboarding(false);
-  };
-
   if (showOnboarding) {
-    return <OnboardingForm onComplete={handleOnboardingComplete} />;
+    return <OnboardingForm onComplete={() => setShowOnboarding(false)} />;
   }
 
   return (
@@ -101,7 +99,7 @@ const Popup = () => {
           </div>
 
           {loading ? (
-            <div className="loading">Analyzing privacy policy...</div>
+            <div className="loading-message">Analyzing privacy policy...</div>
           ) : error ? (
             <div className="error-message">{error}</div>
           ) : (
@@ -109,7 +107,23 @@ const Popup = () => {
               {/* Summary Tab Content */}
               <div className={`tab-content ${activeTab === 'summary' ? 'active' : ''}`}>
                 {analysis && analysis.success ? (
-                  <>
+                  <div style={{ position: 'relative' }}>
+                    <TextToSpeech 
+                      text={`Privacy Policy Risk Level: ${analysis.summary.riskLevel}. ${
+                        analysis.summary.riskLevel === 'High' 
+                          ? "This privacy policy contains multiple concerning elements that could impact your privacy. We've detected a high number of data collection practices and potential sharing with third parties."
+                          : analysis.summary.riskLevel === 'Medium'
+                          ? "This privacy policy has some standard data collection practices, but also includes elements that warrant attention. While not unusually invasive, we recommend reviewing the specific data handling practices."
+                          : "This privacy policy appears to follow privacy-friendly practices. It has clear terms and limited data collection."
+                      }`}
+                      autoPlay={autoPlayAudio}
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        zIndex: 1
+                      }}
+                    />
                     <RiskMeter riskLevel={analysis.summary.riskLevel} />
                     <div className="risk-explanation">
                       {analysis.summary.riskLevel === 'High' && (
@@ -122,14 +136,14 @@ const Popup = () => {
                         "This privacy policy appears to follow privacy-friendly practices. It has clear terms and limited data collection. As always, we recommend reviewing the specific details to ensure they align with your privacy preferences."
                       )}
                     </div>
-                  </>
+                  </div>
                 ) : null}
               </div>
 
               {/* Details Tab Content */}
               <div className={`tab-content ${activeTab === 'details' ? 'active' : ''}`}>
                 {analysis && analysis.success ? (
-                  <PolicyDetails analysis={analysis.analysis} />
+                  <PolicyDetails analysis={analysis.categories} />
                 ) : null}
               </div>
             </div>

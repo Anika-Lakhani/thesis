@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWheelchair, faMoon, faSun, faDesktop, faLaptop } from '@fortawesome/free-solid-svg-icons';
 import { useAccessibility } from '../context/AccessibilityContext';
+import TextToSpeech from "./TextToSpeech";
 
 const Accessibility = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,7 +12,9 @@ const Accessibility = () => {
     theme, 
     setTheme,
     useDyslexicFont,
-    setUseDyslexicFont 
+    setUseDyslexicFont,
+    autoPlayAudio,
+    setAutoPlayAudio
   } = useAccessibility();
   const menuRef = useRef(null);
 
@@ -34,8 +37,26 @@ const Accessibility = () => {
     setUseDyslexicFont(event.target.checked);
   };
 
+  const getAudioContent = () => {
+    return `Accessibility Settings. 
+      Current font size is ${fontSize}. 
+      Dyslexic font is ${useDyslexicFont ? "enabled" : "disabled"}. 
+      Auto-play audio is ${autoPlayAudio ? "enabled" : "disabled"}. 
+      Current theme is ${theme}.`;
+  };
+
   return (
     <div className="accessibility-wrapper" ref={menuRef}>
+      <TextToSpeech 
+        text={getAudioContent()}
+        autoPlay={autoPlayAudio}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          zIndex: 1000
+        }}
+      />
       <button 
         className="header-button accessibility-button" 
         aria-label="Accessibility options"
@@ -78,7 +99,11 @@ const Accessibility = () => {
 
           <section className="accessibility-section">
             <label className="checkbox-label">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={autoPlayAudio}
+                onChange={(e) => setAutoPlayAudio(e.target.checked)}
+              />
               <span>Always automatically play auditory explanations</span>
             </label>
           </section>

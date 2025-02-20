@@ -699,3 +699,27 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.text-to-speech-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  color: var(--text-color);
+}
+
+.text-to-speech-button:hover {
+  background-color: var(--hover-bg);
+}
+
+.text-to-speech-button:focus {
+  outline: 2px solid #1a73e8;
+  outline-offset: 2px;
+}
+
+[data-theme='dark'] .text-to-speech-button {
+  color: var(--text-color);
+}
