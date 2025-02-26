@@ -31,6 +31,7 @@ const Accessibility = () => {
   };
 
   const handleDyslexicFontToggle = (event) => {
+    console.log('Dyslexic font checkbox clicked:', event.target.checked);
     setUseDyslexicFont(event.target.checked);
   };
 
@@ -70,9 +71,13 @@ const Accessibility = () => {
               <input
                 type="checkbox"
                 checked={useDyslexicFont}
-                onChange={handleDyslexicFontToggle}
+                onChange={(e) => {
+                  console.log('Dyslexic font checkbox clicked:', e.target.checked);
+                  setUseDyslexicFont(e.target.checked);
+                }}
+                aria-label="Use dyslexia-friendly font"
               />
-              Use dyslexia-friendly font
+              <span>Use dyslexia-friendly font</span>
             </label>
           </section>
 

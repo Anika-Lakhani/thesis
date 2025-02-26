@@ -31,10 +31,10 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "OpenDyslexic-Regular.woff2",
-        "OpenDyslexic-Regular.woff",
-        "OpenDyslexic-Bold.woff2",
-        "OpenDyslexic-Bold.woff"
+        "fonts/OpenDyslexic-Regular.woff2",
+        "fonts/OpenDyslexic-Regular.woff",
+        "fonts/OpenDyslexic-Bold.woff2",
+        "fonts/OpenDyslexic-Bold.woff"
       ],
       "matches": ["<all_urls>"]
     }

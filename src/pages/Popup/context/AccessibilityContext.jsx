@@ -12,6 +12,7 @@ export const AccessibilityProvider = ({ children }) => {
   // Load saved settings on mount
   useEffect(() => {
     chrome.storage.sync.get(['theme', 'fontSize', 'useDyslexicFont', 'autoPlayAudio', 'playbackSpeed'], (result) => {
+      console.log('Dyslexic font loading from storage:', result.useDyslexicFont);
       if (result.theme) setTheme(result.theme);
       if (result.fontSize) setFontSize(result.fontSize);
       if (result.useDyslexicFont) setUseDyslexicFont(result.useDyslexicFont);
@@ -81,6 +82,7 @@ export const AccessibilityProvider = ({ children }) => {
 
   // Apply font changes
   useEffect(() => {
+    console.log('Font preference changed:', useDyslexicFont);
     const root = document.documentElement;
     if (useDyslexicFont) {
       root.setAttribute('data-dyslexic-font', 'true');

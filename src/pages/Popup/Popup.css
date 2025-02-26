@@ -387,7 +387,6 @@ p {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -478,16 +477,16 @@ p {
 /* Import OpenDyslexic font */
 @font-face {
   font-family: 'OpenDyslexic';
-  src: url('chrome-extension://__MSG_@@extension_id__/fonts/OpenDyslexic-Regular.woff2') format('woff2'),
-       url('chrome-extension://__MSG_@@extension_id__/fonts/OpenDyslexic-Regular.woff') format('woff');
+  src: url('../../assets/fonts/OpenDyslexic-Regular.woff2') format('woff2'),
+       url('../../assets/fonts/OpenDyslexic-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'OpenDyslexic';
-  src: url('chrome-extension://__MSG_@@extension_id__/fonts/OpenDyslexic-Bold.woff2') format('woff2'),
-       url('chrome-extension://__MSG_@@extension_id__/fonts/OpenDyslexic-Bold.woff') format('woff');
+  src: url('../../assets/fonts/OpenDyslexic-Bold.woff2') format('woff2'),
+       url('../../assets/fonts/OpenDyslexic-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -498,7 +497,7 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
 }
 
 [data-dyslexic-font="true"] {
-  --font-family: 'OpenDyslexic', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  --font-family: 'OpenDyslexic', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Update the font-family variable when dyslexic font is enabled */
@@ -621,4 +620,10 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
 
 .settings-wrapper.open::before {
   display: block;
+}
+
+/* Add this rule to ensure the font is applied */
+[data-dyslexic-font="true"] .popup-container,
+[data-dyslexic-font="true"] .popup-container * {
+  font-family: var(--font-family) !important;
 }
