@@ -15,13 +15,19 @@ import {
   faDesktop 
 } from '@fortawesome/free-solid-svg-icons';
 import Settings from './components/Settings';
-import RegularLogoDark from "../../assets/logos/regular-logo-dark.png";
+import DefaultLogoDark from "../../assets/logos/regular-logo-dark.png";
+import DefaultLogoLight from "../../assets/logos/regular-logo-light.png";
+import GirlypopLogoDark from "../../assets/logos/girlypop-logo-dark.png";
+import GirlypopLogoLight from "../../assets/logos/girlypop-logo-light.png";
+import SportsAnnouncerLogoDark from "../../assets/logos/sportsannouncer-logo-dark.png";
+import SportsAnnouncerLogoLight from "../../assets/logos/sportsannouncer-logo-light.png";
 
 const Popup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [activeTab, setActiveTab] = useState('summary');
+  const [currentLogo, setCurrentLogo] = useState(DefaultLogoLight);
 
   useEffect(() => {
     // Automatically analyze when popup opens
@@ -46,12 +52,61 @@ const Popup = () => {
     });
   }, []);
 
+  // Function to determine which logo to use
+  const getLogoForThemeAndFormat = (theme, format) => {
+    const logos = {
+      default: {
+        light: DefaultLogoLight,
+        dark: DefaultLogoDark,
+      },
+      girlypop: {
+        light: GirlypopLogoLight,
+        dark: GirlypopLogoDark,
+      },
+      'sports announcer': {
+        light: SportsAnnouncerLogoLight,
+        dark: SportsAnnouncerLogoDark,
+      },
+    };
+
+    return logos[format]?.[theme] || DefaultLogoLight;
+  };
+
+  // Update logo when theme or format changes
+  useEffect(() => {
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    const format = document.documentElement.getAttribute('data-explanation-format') || 'default';
+    const newLogo = getLogoForThemeAndFormat(theme, format);
+    setCurrentLogo(newLogo);
+  }, []); // This will run once on mount
+
+  // Add event listener for theme changes
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme' || mutation.attributeName === 'data-explanation-format') {
+          const theme = document.documentElement.getAttribute('data-theme') || 'light';
+          const format = document.documentElement.getAttribute('data-explanation-format') || 'default';
+          const newLogo = getLogoForThemeAndFormat(theme, format);
+          setCurrentLogo(newLogo);
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme', 'data-explanation-format']
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <AccessibilityProvider>
       <div className="popup-container">
         <h2>OwlGuard</h2>
         <img 
-          src={RegularLogoDark}
+          src={currentLogo}
           alt="OwlGuard" 
           className="popup-logo-regular-dark"
         />

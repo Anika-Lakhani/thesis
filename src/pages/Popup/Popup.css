@@ -628,7 +628,7 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
 }
 
 .popup-logo-regular-dark {
-  height: 32px;  /* Adjust this value based on your needs */
+  height: 36px;  /* Adjust this value based on your needs */
   width: auto;
   margin-right: 100px;
   display: block;
