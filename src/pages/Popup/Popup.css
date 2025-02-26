@@ -68,8 +68,7 @@ html, body {
 }
 
 h2:first-of-type {
-  margin-right: 100px;
-  color: #1a73e8;
+  display: none;
 }
 
 h2 {
@@ -455,16 +454,16 @@ p {
 
 /* Dark theme overrides */
 [data-theme="dark"] .details-row {
-  background-color: #2c2c2c !important;
+  background-color: #363636 !important;
   color: #e8eaed !important;
 }
 
 [data-theme="dark"] .details-row.warning {
-  background-color: #3c3024 !important;
+  background-color: #4c3d2d !important;
 }
 
 [data-theme="dark"] .details-row.success {
-  background-color: #233427 !important;
+  background-color: #2d4432 !important;
 }
 
 /* Ensure text is visible in dark mode */
@@ -626,4 +625,50 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
 [data-dyslexic-font="true"] .popup-container,
 [data-dyslexic-font="true"] .popup-container * {
   font-family: var(--font-family) !important;
+}
+
+.popup-logo-regular-dark {
+  height: 32px;  /* Adjust this value based on your needs */
+  width: auto;
+  margin-right: 100px;
+  display: block;
+  object-fit: contain;
+}
+
+/* This will only apply when both dark mode AND default format are selected */
+[data-theme="dark"][data-explanation-format="default"] .popup-container {
+  background-color: #23637a;
+}
+
+/* Make header icons more visible */
+[data-theme="dark"] .header-button {
+  color: rgba(232, 234, 237, 0.9); /* Brighter version of --text-color */
+}
+
+/* Improve tab text contrast */
+[data-theme="dark"] .tab-button {
+  color: rgba(232, 234, 237, 0.8); /* Inactive tab */
+}
+
+[data-theme="dark"] .tab-button.active {
+  color: #4d9fff; /* Brighter blue for active tab */
+}
+
+/* Increase opacity for detail indicators */
+[data-theme="dark"] .details-row.warning {
+  background-color: rgba(255, 168, 38, 0.35); /* More opaque yellow */
+}
+
+[data-theme="dark"] .details-row.success {
+  background-color: rgba(76, 175, 80, 0.35); /* More opaque green */
+}
+
+[data-theme="dark"] .details-row {
+  background-color: rgba(60, 64, 67, 0.9); /* More opaque background */
+}
+
+/* Make icons in details more visible */
+[data-theme="dark"] .detail-icon {
+  opacity: 1;
+  color: rgba(232, 234, 237, 0.95);
 }

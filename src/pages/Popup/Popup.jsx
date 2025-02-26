@@ -15,6 +15,7 @@ import {
   faDesktop 
 } from '@fortawesome/free-solid-svg-icons';
 import Settings from './components/Settings';
+import RegularLogoDark from "../../assets/logos/regular-logo-dark.png";
 
 const Popup = () => {
   const [loading, setLoading] = useState(false);
@@ -49,6 +50,11 @@ const Popup = () => {
     <AccessibilityProvider>
       <div className="popup-container">
         <h2>OwlGuard</h2>
+        <img 
+          src={RegularLogoDark}
+          alt="OwlGuard" 
+          className="popup-logo-regular-dark"
+        />
         <div className="popup-header-controls">
           <Settings />
           <Accessibility />

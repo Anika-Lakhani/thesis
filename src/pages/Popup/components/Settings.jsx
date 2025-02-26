@@ -8,6 +8,11 @@ const Settings = () => {
   const [selectedReadingLevel, setSelectedReadingLevel] = useState('medium');
   const [selectedFormat, setSelectedFormat] = useState('default');
 
+  // Add this effect to update the data attribute
+  useEffect(() => {
+    document.documentElement.setAttribute('data-explanation-format', selectedFormat);
+  }, [selectedFormat]);
+
   // Handle click outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -73,7 +78,7 @@ const Settings = () => {
   };
 
   const readingLevels = ['simple', 'medium', 'advanced'];
-  const explanationFormats = ['default', 'girlypop', 'surfer dude', 'sports announcer'];
+  const explanationFormats = ['default', 'girlypop', 'sports announcer'];
 
   return (
     <div className="settings-wrapper" ref={settingsRef}>
