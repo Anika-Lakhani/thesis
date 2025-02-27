@@ -151,13 +151,31 @@ const Popup = () => {
                     <RiskMeter riskLevel={analysis.summary.riskLevel} />
                     <div className="risk-explanation">
                       {analysis.summary.riskLevel === 'High' && (
-                        "This privacy policy contains multiple concerning elements that could impact your privacy. We've detected a high number of data collection practices and potential sharing with third parties. Consider reviewing the Details tab for specific concerns."
+                        document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ? (
+                          "OMG bestie, this privacy policy is like totally sketchy! 🚩 They're collecting ALL your data and sharing it with, like, everyone! You might wanna check the deets tab because there's some major red flags here!"
+                        ) : document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ? (
+                          "WHOA FOLKS, THIS IS A TOUGH ONE! We're seeing some AGGRESSIVE data collection plays out there! The defense is DOWN and they're sharing data left and right! Head over to the Details tab for the full play-by-play breakdown!"
+                        ) : (
+                          "This privacy policy contains multiple concerning elements that could impact your privacy. We've detected a high number of data collection practices and potential sharing with third parties. Consider reviewing the Details tab for specific concerns."
+                        )
                       )}
                       {analysis.summary.riskLevel === 'Medium' && (
-                        "This privacy policy has some standard data collection practices, but also includes elements that warrant attention. While not unusually invasive, we recommend reviewing the specific data handling practices in the Details tab."
+                        document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ? (
+                          "Kay so like, this privacy policy isn't the worst but it's not giving bestie vibes either? 💅 They're doing some normal stuff but maybe check the Details tab just to make sure you're cool with everything!"
+                        ) : document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ? (
+                          "AND WE'RE AT HALFTIME FOLKS! This privacy policy is playing a balanced game - some standard moves we'd expect to see, but keep your eyes on the field! Check out the Details tab for the full strategic breakdown!"
+                        ) : (
+                          "This privacy policy has some standard data collection practices, but also includes elements that warrant attention. While not unusually invasive, we recommend reviewing the specific data handling practices in the Details tab."
+                        )
                       )}
                       {analysis.summary.riskLevel === 'Low' && (
-                        "This privacy policy appears to follow privacy-friendly practices. It has clear terms and limited data collection. As always, we recommend reviewing the specific details to ensure they align with your privacy preferences."
+                        document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ? (
+                          "Slay! 💅✨ This privacy policy is giving secure vibes! They're being super respectful with your data and keeping things clean. Still worth a quick peek at the Details tab tho, just to stay in the know!"
+                        ) : document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ? (
+                          "TOUCHDOWN, PRIVACY FANS! This policy is showing EXCELLENT form with privacy-friendly practices! A STELLAR performance in data protection! Take a quick timeout to review the Details tab for the full winning strategy!"
+                        ) : (
+                          "This privacy policy appears to follow privacy-friendly practices. It has clear terms and limited data collection. As always, we recommend reviewing the specific details to ensure they align with your privacy preferences."
+                        )
                       )}
                     </div>
                   </>

@@ -1,6 +1,40 @@
 import React from 'react';
 
 const RiskMeter = ({ riskLevel }) => {
+  // Get the current explanation format
+  const format = document.documentElement.getAttribute('data-explanation-format') || 'default';
+
+  // Get risk description based on format and level
+  const getRiskDescription = (level) => {
+    switch (format) {
+      case 'girlypop':
+        switch (level.toLowerCase()) {
+          case 'low':
+            return "We Gucci 💅 I like her, she's safe";
+          case 'medium':
+            return "Gonna be honest... she's a little sketch 💁‍♀️";
+          case 'high':
+            return "RED FLAG fs 🚩 Don't say I didn't warn you.";
+          default:
+            return "She's a little mysterious 🤔 tbh can't tell";
+        }
+      case 'sports announcer':
+        switch (level.toLowerCase()) {
+          case 'low':
+            return "Folks, we're looking at a clean game here!";
+          case 'medium':
+            return "This could go either way! Excited to watch the play!";
+          case 'high':
+            return "RED CARD! I REPEAT, RED CARD!";
+          default:
+            return "The judges are still reviewing the play!";
+        }
+      default:
+        // Keep default text unchanged
+        return `This privacy policy shows a ${level} level of risk.`;
+    }
+  };
+
   // Keep needle calculations the same
   const getNeedleValue = (level) => {
     switch (level.toLowerCase()) {
@@ -43,6 +77,7 @@ const RiskMeter = ({ riskLevel }) => {
   return (
     <div className="risk-assessment">
       <h2 className="risk-title">Risk Level: {riskLevel}</h2>
+      <p className="risk-description">{getRiskDescription(riskLevel)}</p>
       <div className="risk-meter">
         <svg viewBox="0 0 200 120">
           {/* Background arc */}

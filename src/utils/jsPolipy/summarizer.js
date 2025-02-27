@@ -52,12 +52,22 @@ export class Summarizer {
 
     generateRecommendations(analysis) {
         const recommendations = [];
+        const format = document.documentElement.getAttribute('data-explanation-format') || 'default';
+
         Object.entries(analysis).forEach(([category, data]) => {
             if (data.findings.length > 0) {
-                recommendations.push({
-                    category,
-                    text: `Review ${data.findings.length} instances of ${category} policies`
-                });
+                let text;
+                switch (format) {
+                    case 'girlypop':
+                        text = `Bestie, you might wanna check out these ${data.findings.length} ${category} things 💁‍♀️`;
+                        break;
+                    case 'sports announcer':
+                        text = `BREAKING NEWS: ${data.findings.length} ${category.toUpperCase()} POLICIES NEED REVIEW!`;
+                        break;
+                    default:
+                        text = `Review ${data.findings.length} instances of ${category} policies`;
+                }
+                recommendations.push({ category, text });
             }
         });
         return recommendations;

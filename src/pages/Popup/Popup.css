@@ -433,7 +433,7 @@ p {
   color: var(--details-text);
 }
 
-/* Light theme colors */
+/* Light theme colors for details rows */
 .details-row {
   background-color: #f8f9fa;
   color: #202124;
@@ -442,28 +442,34 @@ p {
   margin-bottom: 8px;
 }
 
-/* Warning rows (with exclamation mark) in light theme */
-.details-row.warning {
+.details-row.high {
+  background-color: #ffebee;
+}
+
+.details-row.medium {
   background-color: #fff3e0;
 }
 
-/* Success rows (with thumbs up) in light theme */
-.details-row.success {
+.details-row.low {
   background-color: #e8f5e9;
 }
 
 /* Dark theme overrides */
 [data-theme="dark"] .details-row {
-  background-color: #363636 !important;
-  color: #e8eaed !important;
+  background-color: rgba(32, 33, 36, 0.8);
+  color: #e8eaed;
 }
 
-[data-theme="dark"] .details-row.warning {
-  background-color: #4c3d2d !important;
+[data-theme="dark"] .details-row.high {
+  background-color: rgba(183, 28, 28, 0.35);
 }
 
-[data-theme="dark"] .details-row.success {
-  background-color: #2d4432 !important;
+[data-theme="dark"] .details-row.medium {
+  background-color: rgba(255, 167, 38, 0.35);
+}
+
+[data-theme="dark"] .details-row.low {
+  background-color: rgba(76, 175, 80, 0.35);
 }
 
 /* Ensure text is visible in dark mode */
