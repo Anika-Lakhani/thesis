@@ -640,6 +640,15 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
   background-color: #23637a;
 }
 
+/* Dark mode specific styles for different description styles */
+[data-theme="dark"][data-explanation-format="girlypop"] .popup-container {
+  background-color: #f249a0;
+}
+
+[data-theme="dark"][data-explanation-format="sports announcer"] .popup-container {
+  background-color: #A35214;
+}
+
 /* Make header icons more visible */
 [data-theme="dark"] .header-button {
   color: rgba(232, 234, 237, 0.9); /* Brighter version of --text-color */
