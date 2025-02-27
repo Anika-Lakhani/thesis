@@ -68,23 +68,25 @@ const PolicyDetails = ({ analysis }) => {
     return messages[category] || `${category} policies detected`;
   };
 
+  const getRiskClass = (risk) => {
+    switch (risk.toLowerCase()) {
+      case 'high': return 'risk-high';
+      case 'medium': return 'risk-medium';
+      case 'low': return 'risk-low';
+      default: return '';
+    }
+  };
+
   return (
     <div className="policy-details">
       {sortedCategories.map(([category, categoryData]) => {
         const effectiveRisk = getEffectiveRisk(categoryData);
+        const emoji = getIcon(effectiveRisk);
+        const text = getFormatText(category, categoryData);
         return (
-          <div
-            key={category}
-            className={`details-row ${effectiveRisk.toLowerCase()}`}
-          >
-            <div className="details-icon">
-              {getIcon(effectiveRisk)}
-            </div>
-            <div className="details-content">
-              <p className="details-text">
-                {getFormatText(category, categoryData)}
-              </p>
-            </div>
+          <div className={`details-row ${getRiskClass(effectiveRisk)}`}>
+            <span className="details-row-emoji">{emoji}&nbsp;</span>
+            <span className="details-row-text">{text}</span>
           </div>
         );
       })}

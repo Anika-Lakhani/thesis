@@ -2,16 +2,36 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
+/**
+ * Settings component for managing user preferences
+ * @returns {React.ReactElement} Settings component
+ */
 const Settings = () => {
   const [isOpen, setIsOpen] = useState(false);
   const settingsRef = useRef(null);
   const [selectedReadingLevel, setSelectedReadingLevel] = useState('medium');
-  const [selectedFormat, setSelectedFormat] = useState('default');
+  const [currentFormat, setCurrentFormat] = useState("default");
 
-  // Add this effect to update the data attribute
   useEffect(() => {
-    document.documentElement.setAttribute('data-explanation-format', selectedFormat);
-  }, [selectedFormat]);
+    // Load saved format on component mount
+    chrome.storage.sync.get(["explanationFormat"], (result) => {
+      const savedFormat = result.explanationFormat || "default";
+      setCurrentFormat(savedFormat);
+      document.documentElement.setAttribute("data-explanation-format", savedFormat);
+    });
+  }, []);
+
+  /**
+   * Handles changes to the explanation format
+   * @param {string} format - The selected format
+   */
+  const handleFormatChange = (format) => {
+    setCurrentFormat(format);
+    document.documentElement.setAttribute("data-explanation-format", format);
+    
+    // Save format preference to chrome storage
+    chrome.storage.sync.set({ explanationFormat: format });
+  };
 
   // Handle click outside
   useEffect(() => {
@@ -125,10 +145,10 @@ const Settings = () => {
               {explanationFormats.map((format) => (
                 <button
                   key={format}
-                  className={`setting-option ${selectedFormat === format ? 'active' : ''}`}
-                  aria-pressed={selectedFormat === format}
-                  onClick={() => setSelectedFormat(format)}
-                  onKeyDown={(e) => handleKeyDown(e, explanationFormats, selectedFormat, setSelectedFormat)}
+                  className={`setting-option ${currentFormat === format ? 'active' : ''}`}
+                  aria-pressed={currentFormat === format}
+                  onClick={() => handleFormatChange(format)}
+                  onKeyDown={(e) => handleKeyDown(e, explanationFormats, currentFormat, setCurrentFormat)}
                 >
                   {format.charAt(0).toUpperCase() + format.slice(1)}
                 </button>
