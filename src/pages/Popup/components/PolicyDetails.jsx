@@ -24,16 +24,15 @@ const PolicyDetails = ({ analysis }) => {
   // Function to get format-specific text for a category
   const getFormatText = (category, findings) => {
     const effectiveRisk = getEffectiveRisk(findings);
-    const count = findings.findings.length;
-    const formattedCategory = formatCategoryName(category);
+    const baseMessage = getCategoryMessage(category, findings.findings);
     
     switch (format) {
-      case 'girlypop':
-        return `${formattedCategory} is giving ${effectiveRisk} vibes (found ${count} instances) 💅`;
-      case 'sports announcer':
-        return `BREAKING: ${formattedCategory.toUpperCase()} shows ${effectiveRisk.toUpperCase()} RISK LEVEL! ${count} INSTANCES FOUND!`;
+      case "girlypop":
+        return `${baseMessage} (${effectiveRisk} vibes)`;
+      case "sports announcer":
+        return `Wow, Joe! ${baseMessage}! The stakes of this play are ${effectiveRisk.toUpperCase()}! 🎯`;
       default:
-        return `${formattedCategory} shows ${effectiveRisk} risk level (${count} instances found)`;
+        return `${baseMessage} (${effectiveRisk} risk)`;
     }
   };
 
@@ -54,16 +53,16 @@ const PolicyDetails = ({ analysis }) => {
 
   const getCategoryMessage = (category, findings) => {
     const messages = {
-      dataCollection: 'Data collected: ' + findings.map(f => 
-        f.match.replace(/collect[s]?\s+|your\s+|we\s+/gi, '')
-      )[0],
-      thirdPartySharing: 'Data shared with third parties',
+      dataCollection: `Data collected: ${findings.map(f => 
+        f.match.replace(/collect[s]?\s+|your\s+|we\s+/gi, "")
+      )[0]}`,
+      thirdPartySharing: "Data shared with third parties",
       dataSecurity: findings.some(f => /encrypt/i.test(f.pattern)) 
-        ? 'Data is encrypted in transit'
-        : 'Security measures in place',
-      userRights: 'User controls available for data management',
-      dataRetention: 'Data retention policies specified',
-      cookies: 'Uses cookies and tracking technologies'
+        ? "Data is encrypted in transit"
+        : "Security measures in place",
+      userRights: "User controls available for data management",
+      dataRetention: "Data retention policies specified",
+      cookies: "Uses cookies and tracking technologies"
     };
     return messages[category] || `${category} policies detected`;
   };
