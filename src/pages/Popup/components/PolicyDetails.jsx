@@ -5,12 +5,34 @@ const PolicyDetails = ({ analysis }) => {
   const { theme } = useAccessibility();
   const format = document.documentElement.getAttribute('data-explanation-format') || 'default';
 
-  // Function to determine actual risk based on instances and base risk
+  // Function to determine effective risk based on instances and base/standard risk
   const getEffectiveRisk = (categoryData) => {
     if (categoryData.findings.length === 0) {
-      return 'low';  // If no instances found, risk is low
+      return "low";  // If no instances found, risk is low
     }
-    return categoryData.risk;  // Otherwise use the category's defined risk
+    return categoryData.risk;  // Otherwise use the category's defined standard risk
+  };
+
+  // New function to convert effective risk to format-specific risk name
+  const getFormattedRiskLevel = (effectiveRisk) => {
+    switch (format) {
+      case "girlypop":
+        switch (effectiveRisk.toLowerCase()) {
+          case "high": return "super sus😬";
+          case "medium": return "mid😕";
+          case "low": return "perf🥰";
+          default: return "idek sorry";
+        }
+      case "sports announcer":
+        switch (effectiveRisk.toLowerCase()) {
+          case "high": return "DANGER: 2-MIN WARNING";
+          case "medium": return "CAUTION: INTERCEPTION POSSIBLE";
+          case "low": return "CLEAR: FAST BREAK AND SCORE!";
+          default: return "UNKNOWN";
+        }
+      default:
+        return effectiveRisk.toLowerCase();
+    }
   };
 
   // Function to format category name from camelCase to Title Case
@@ -21,16 +43,16 @@ const PolicyDetails = ({ analysis }) => {
     return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
   };
 
-  // Function to get format-specific text for a category
   const getFormatText = (category, findings) => {
     const effectiveRisk = getEffectiveRisk(findings);
+    const formattedRisk = getFormattedRiskLevel(effectiveRisk);
     const baseMessage = getCategoryMessage(category, findings.findings);
     
     switch (format) {
       case "girlypop":
-        return `${baseMessage} (${effectiveRisk} vibes)`;
+        return `${baseMessage} (${formattedRisk})`;
       case "sports announcer":
-        return `Wow, Joe! ${baseMessage}! The stakes of this play are ${effectiveRisk.toUpperCase()}! 🎯`;
+        return `Wow, Joe! ${baseMessage}! The stakes of this play are ${formattedRisk}! 📋`;
       default:
         return `${baseMessage} (${effectiveRisk} risk)`;
     }
@@ -43,11 +65,33 @@ const PolicyDetails = ({ analysis }) => {
   });
 
   const getIcon = (risk) => {
-    switch (risk.toLowerCase()) {
-      case 'high': return '👎';
-      case 'medium': return '⚠️';
-      case 'low': return '👍';
-      default: return '❔';
+    const riskLevel = risk.toLowerCase();
+    
+    switch (format) {
+      case "girlypop":
+        switch (riskLevel) {
+          case "high": return "🤮";
+          case "medium": return "🤨";
+          case "low": return "🤤";
+          default: return "🤷‍♀️";
+        }
+      
+      case "sports announcer":
+        switch (riskLevel) {
+          case "high": return "🔴";
+          case "medium": return "🟡";
+          case "low": return "🟢";
+          default: return "❔";
+        }
+      
+      default:
+        // Original emoji set
+        switch (riskLevel) {
+          case "high": return "👎";
+          case "medium": return "⚠️";
+          case "low": return "👍";
+          default: return "❔";
+        }
     }
   };
 
