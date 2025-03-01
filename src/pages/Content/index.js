@@ -1,6 +1,5 @@
 const PRIVACY_POLICY_PATTERNS = [
   /privacy\s*policy/i,
-  /privacy/i,
   /privacy\s*notice/i,
   /privacy\s*statement/i,
   /data\s*protection\s*policy/i,
@@ -43,14 +42,34 @@ function getSiteName() {
 function findPrivacyPolicy() {
   const links = document.getElementsByTagName('a');
   let hasPrivacyPolicy = false;
+  let matchedPatterns = [];
   
   // Check if any privacy policy links exist
   for (const link of links) {
     const text = link.textContent.toLowerCase();
-    if (PRIVACY_POLICY_PATTERNS.some(pattern => pattern.test(text))) {
-      hasPrivacyPolicy = true;
-      break;
-    }
+    
+    // Find all matching patterns (for error logging)
+    PRIVACY_POLICY_PATTERNS.forEach(pattern => {
+      if (pattern.test(text)) {
+        matchedPatterns.push({
+          pattern: pattern.toString(),
+          matchedText: text
+        });
+        hasPrivacyPolicy = true;
+      }
+    });
+  }
+
+  // Log matched patterns if any were found
+  if (matchedPatterns.length > 0) {
+    console.log('Privacy Policy Detection Results:');
+    console.log('URL:', window.location.href);
+    console.log('Matched Patterns:');
+    matchedPatterns.forEach(match => {
+      console.log(`- Pattern: ${match.pattern}`);
+      console.log(`  Matched Text: "${match.matchedText}"`);
+      console.log('---');
+    });
   }
 
   if (hasPrivacyPolicy) {
