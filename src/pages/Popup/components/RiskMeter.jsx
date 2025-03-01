@@ -38,18 +38,19 @@ const RiskMeter = ({ riskLevel }) => {
   // Keep needle calculations the same
   const getNeedleValue = (level) => {
     switch (level.toLowerCase()) {
-      case 'low': return 0.2;
-      case 'medium': return 0.5;
+      case 'low': return 0.25;
+      case 'medium': return 0.4;
       case 'high': return 0.8;
       default: return 0.5;
     }
   };
 
+  // Adjust arc value calculations for better positioning
   const getArcValue = (level) => {
     switch (level.toLowerCase()) {
-      case 'low': return 0.2;
-      case 'medium': return 0.65;
-      case 'high': return 0.8;
+      case 'low': return 0.3;  // 30% of the arc
+      case 'medium': return 0.5;  // 50% of the arc
+      case 'high': return 0.8;  // 80% of the arc
       default: return 0.5;
     }
   };
@@ -62,7 +63,7 @@ const RiskMeter = ({ riskLevel }) => {
   
   // Arc calculations
   const arcLength = 188.5;
-  const dashOffset = arcLength * (1 - arcValue);
+  const dashOffset = 0;  // Reset offset to start from left side
 
   // Get color based on risk level
   const getColor = (level) => {
@@ -92,10 +93,23 @@ const RiskMeter = ({ riskLevel }) => {
             className="risk-meter-path risk-meter-value"
             style={{
               stroke: getColor(riskLevel),
-              strokeDasharray: arcLength,
-              strokeDashoffset: dashOffset
+              strokeDasharray: `${arcLength * arcValue} ${arcLength}`
             }}
           />
+          
+          {/* Only show masking arc for low risk */}
+          {riskLevel.toLowerCase() === 'low' && (
+            <path
+              d="M20 100 A 60 60 0 0 1 180 100"
+              className="risk-meter-path"
+              style={{
+                stroke: '#e0e0e0',
+                strokeWidth: 20,
+                strokeDasharray: `${arcLength / 2} ${arcLength}`,
+                strokeDashoffset: arcLength / 2
+              }}
+            />
+          )}
           
           {/* Needle */}
           <line
