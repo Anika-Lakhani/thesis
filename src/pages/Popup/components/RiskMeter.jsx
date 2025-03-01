@@ -39,7 +39,7 @@ const RiskMeter = ({ riskLevel }) => {
   const getNeedleValue = (level) => {
     switch (level.toLowerCase()) {
       case 'low': return 0.25;
-      case 'medium': return 0.4;
+      case 'medium': return 0.5;
       case 'high': return 0.8;
       default: return 0.5;
     }
@@ -49,7 +49,7 @@ const RiskMeter = ({ riskLevel }) => {
   const getArcValue = (level) => {
     switch (level.toLowerCase()) {
       case 'low': return 0.3;  // 30% of the arc
-      case 'medium': return 0.5;  // 50% of the arc
+      case 'medium': return 0.65;  // Increased to show exactly half of visible arc
       case 'high': return 0.8;  // 80% of the arc
       default: return 0.5;
     }
