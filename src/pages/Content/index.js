@@ -1,3 +1,18 @@
+// Force immediate logging when script loads
+(() => {
+  // Send a message to the background script for logging
+  chrome.runtime.sendMessage({
+    type: "DEBUG_LOG",
+    payload: {
+      message: "Content script loaded",
+      url: window.location.href,
+      extensionId: chrome.runtime.id
+    }
+  });
+})();
+
+console.log("[Privacy Policy Detector] Content script loaded:", window.location.href);
+
 const PRIVACY_POLICY_PATTERNS = [
   /privacy\s*policy/i,
   /privacy\s*notice/i,
@@ -40,37 +55,45 @@ function getSiteName() {
 }
 
 function findPrivacyPolicy() {
-  const links = document.getElementsByTagName('a');
+  const links = document.getElementsByTagName("a");
   let hasPrivacyPolicy = false;
   let matchedPatterns = [];
   
-  // Check if any privacy policy links exist
+  // Send debug info through message
+  chrome.runtime.sendMessage({
+    type: "DEBUG_LOG",
+    payload: {
+      message: "Scanning page",
+      url: window.location.href,
+      linkCount: links.length
+    }
+  });
+  
   for (const link of links) {
-    const text = link.textContent.toLowerCase();
+    const text = (link.textContent || "").toLowerCase();
     
-    // Find all matching patterns (for error logging)
     PRIVACY_POLICY_PATTERNS.forEach(pattern => {
       if (pattern.test(text)) {
         matchedPatterns.push({
           pattern: pattern.toString(),
-          matchedText: text
+          matchedText: text,
+          href: link.href
         });
         hasPrivacyPolicy = true;
       }
     });
   }
 
-  // Log matched patterns if any were found
-  if (matchedPatterns.length > 0) {
-    console.log('Privacy Policy Detection Results:');
-    console.log('URL:', window.location.href);
-    console.log('Matched Patterns:');
-    matchedPatterns.forEach(match => {
-      console.log(`- Pattern: ${match.pattern}`);
-      console.log(`  Matched Text: "${match.matchedText}"`);
-      console.log('---');
-    });
-  }
+  // Send debug info through message
+  chrome.runtime.sendMessage({
+    type: "DEBUG_LOG",
+    payload: {
+      message: matchedPatterns.length > 0 ? "Matches found" : "No matches found",
+      url: window.location.href,
+      timestamp: new Date().toISOString(),
+      matches: matchedPatterns
+    }
+  });
 
   if (hasPrivacyPolicy) {
     const siteName = getSiteName();

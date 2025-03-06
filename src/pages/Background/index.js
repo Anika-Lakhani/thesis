@@ -1,3 +1,17 @@
+// Simple console log to verify the service worker loads
+console.log('Background service worker initialized');
+
+// Basic message listener
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log('Received message:', message);
+  return true;
+});
+
+// Keep service worker active by handling install and activate events
+chrome.runtime.onInstalled.addListener(() => {
+  console.log('Extension installed');
+});
+
 // Listen for messages from content script
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'PRIVACY_POLICY_DETECTED') {
@@ -16,6 +30,20 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       console.error('Error scraping policy:', error);
       sendResponse({ success: false, error: error.message });
     }
+  // error logging to understand how the extension is finding a privacy policy
+  } else if (message.type === "PRIVACY_POLICY_DEBUG") {
+    console.log("Privacy Policy Detection Results:", message.payload);
+    console.log("URL:", message.payload.url);
+    console.log("Matches found:", message.payload.matches.length);
+    message.payload.matches.forEach(match => {
+      console.log("- Pattern:", match.pattern);
+      console.log("  Matched Text:", match.matchedText);
+      console.log("  Link URL:", match.href);
+      console.log("---");
+    });
+  } else if (message.type === "DEBUG_LOG") {
+    // Log to background script console
+    console.log("[Privacy Policy Detector]", message.payload.message, message.payload);
   }
   return true;
 });
