@@ -6,38 +6,35 @@
   "permissions": [
     "activeTab",
     "storage",
-    "scripting",
-    "tabs"
+    "scripting"
   ],
   "host_permissions": [
     "<all_urls>"
   ],
   "action": {
-    "default_popup": "pages/Popup/popup.html",
+    "default_popup": "popup.html",
     "default_icon": {
-      "16": "assets/icon-16.png",
-      "48": "assets/icon-48.png",
-      "128": "assets/icon-128.png"
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
     }
   },
   "background": {
-    "service_worker": "pages/Background/index.js"
+    "service_worker": "background.bundle.js"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["pages/Content/index.js"],
-      "css": ["pages/Content/content.styles.css"],
-      "run_at": "document_idle"
+      "js": ["contentScript.bundle.js"]
     }
   ],
   "web_accessible_resources": [
     {
       "resources": [
-        "assets/fonts/OpenDyslexic-Regular.woff2",
-        "assets/fonts/OpenDyslexic-Regular.woff",
-        "assets/fonts/OpenDyslexic-Bold.woff2",
-        "assets/fonts/OpenDyslexic-Bold.woff"
+        "fonts/OpenDyslexic-Regular.woff2",
+        "fonts/OpenDyslexic-Regular.woff",
+        "fonts/OpenDyslexic-Bold.woff2",
+        "fonts/OpenDyslexic-Bold.woff"
       ],
       "matches": ["<all_urls>"]
     }
