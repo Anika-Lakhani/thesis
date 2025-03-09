@@ -785,3 +785,32 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
 [data-theme="dark"] .audio-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
+
+.speed-options {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0;
+  width: 100%; /* Make container full width */
+}
+
+.speed-option {
+  flex: 1; /* Make each button take equal width */
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--button-bg);
+  cursor: pointer;
+  color: var(--button-text);
+  font-size: var(--font-size-base);
+  text-align: center; /* Ensure text is centered */
+}
+
+.speed-option:hover {
+  background-color: var(--hover-bg);
+}
+
+.speed-option.active {
+  background-color: #1a73e8;
+  color: white;
+  border-color: #1a73e8;
+}

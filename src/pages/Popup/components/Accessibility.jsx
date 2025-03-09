@@ -12,7 +12,11 @@ const Accessibility = ({ isOpen, setIsOpen }) => {
     theme, 
     setTheme,
     useDyslexicFont,
-    setUseDyslexicFont 
+    setUseDyslexicFont,
+    autoPlayAudio,
+    setAutoPlayAudio,
+    playbackSpeed,
+    setPlaybackSpeed
   } = useAccessibility();
   const menuRef = useRef(null);
 
@@ -78,11 +82,9 @@ const Accessibility = ({ isOpen, setIsOpen }) => {
             <label className="checkbox-label">
               <input
                 type="checkbox"
+                id="dyslexicFont"
                 checked={useDyslexicFont}
-                onChange={(e) => {
-                  console.log('Dyslexic font checkbox clicked:', e.target.checked);
-                  setUseDyslexicFont(e.target.checked);
-                }}
+                onChange={(e) => setUseDyslexicFont(e.target.checked)}
                 aria-label="Use dyslexia-friendly font"
               />
               <span>Use dyslexia-friendly font</span>
@@ -91,17 +93,37 @@ const Accessibility = ({ isOpen, setIsOpen }) => {
 
           <section className="accessibility-section">
             <label className="checkbox-label">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                id="autoPlayAudio"
+                checked={autoPlayAudio}
+                onChange={(e) => setAutoPlayAudio(e.target.checked)}
+              />
               <span>Always automatically play auditory explanations</span>
             </label>
           </section>
 
           <section className="accessibility-section">
             <h3>Audio playback speed</h3>
-            <div className="playback-speed-controls">
-              <button className={`speed-button`}>slow</button>
-              <button className={`speed-button active`}>regular</button>
-              <button className={`speed-button`}>fast</button>
+            <div className="speed-options">
+              <button
+                className={`speed-option ${playbackSpeed === 'slow' ? 'active' : ''}`}
+                onClick={() => setPlaybackSpeed('slow')}
+              >
+                slow
+              </button>
+              <button
+                className={`speed-option ${playbackSpeed === 'regular' ? 'active' : ''}`}
+                onClick={() => setPlaybackSpeed('regular')}
+              >
+                regular
+              </button>
+              <button
+                className={`speed-option ${playbackSpeed === 'fast' ? 'active' : ''}`}
+                onClick={() => setPlaybackSpeed('fast')}
+              >
+                fast
+              </button>
             </div>
           </section>
 

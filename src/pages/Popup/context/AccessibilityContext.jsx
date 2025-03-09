@@ -11,14 +11,16 @@ export const AccessibilityProvider = ({ children }) => {
 
   // Load saved settings on mount
   useEffect(() => {
-    chrome.storage.sync.get(['theme', 'fontSize', 'useDyslexicFont', 'autoPlayAudio', 'playbackSpeed'], (result) => {
-      console.log('Dyslexic font loading from storage:', result.useDyslexicFont);
-      if (result.theme) setTheme(result.theme);
-      if (result.fontSize) setFontSize(result.fontSize);
-      if (result.useDyslexicFont) setUseDyslexicFont(result.useDyslexicFont);
-      if (result.autoPlayAudio) setAutoPlayAudio(result.autoPlayAudio);
-      if (result.playbackSpeed) setPlaybackSpeed(result.playbackSpeed);
-    });
+    chrome.storage.sync.get(
+      ['fontSize', 'useDyslexicFont', 'theme', 'autoPlayAudio', 'playbackSpeed'],
+      (result) => {
+        if (result.fontSize) setFontSize(result.fontSize);
+        if (result.useDyslexicFont !== undefined) setUseDyslexicFont(result.useDyslexicFont);
+        if (result.theme) setTheme(result.theme);
+        if (result.autoPlayAudio !== undefined) setAutoPlayAudio(result.autoPlayAudio);
+        if (result.playbackSpeed) setPlaybackSpeed(result.playbackSpeed);
+      }
+    );
   }, []);
 
   // Apply theme changes
@@ -93,15 +95,15 @@ export const AccessibilityProvider = ({ children }) => {
   }, [useDyslexicFont]);
 
   // Save settings whenever they change
-  const updateTheme = (newTheme) => {
-    setTheme(newTheme);
-    chrome.storage.sync.set({ theme: newTheme });
-  };
-
-  const updateFontSize = (newSize) => {
-    setFontSize(newSize);
-    chrome.storage.sync.set({ fontSize: newSize });
-  };
+  useEffect(() => {
+    chrome.storage.sync.set({
+      fontSize,
+      useDyslexicFont,
+      theme,
+      autoPlayAudio,
+      playbackSpeed
+    });
+  }, [fontSize, useDyslexicFont, theme, autoPlayAudio, playbackSpeed]);
 
   const getFontSizeValue = () => {
     switch (fontSize) {
@@ -119,23 +121,23 @@ export const AccessibilityProvider = ({ children }) => {
     return theme;
   };
 
-  const value = {
-    fontSize,
-    setFontSize,
-    useDyslexicFont,
-    setUseDyslexicFont,
-    autoPlayAudio,
-    setAutoPlayAudio,
-    playbackSpeed,
-    setPlaybackSpeed,
-    theme,
-    setTheme,
-    getFontSizeValue,
-    getTheme,
-  };
-
   return (
-    <AccessibilityContext.Provider value={value}>
+    <AccessibilityContext.Provider
+      value={{
+        fontSize,
+        setFontSize,
+        useDyslexicFont,
+        setUseDyslexicFont,
+        theme,
+        setTheme,
+        autoPlayAudio,
+        setAutoPlayAudio,
+        playbackSpeed,
+        setPlaybackSpeed,
+        getFontSizeValue,
+        getTheme,
+      }}
+    >
       {children}
     </AccessibilityContext.Provider>
   );
