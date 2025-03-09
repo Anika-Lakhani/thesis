@@ -79,10 +79,30 @@ const AudioPlayer = ({ pageType, content, activeTab, isModalOpen }) => {
 
   // Handle auto-play when navigating between pages
   useEffect(() => {
-    if (autoPlayAudio && currentPageRef.current === pageType) {
+    // Only auto-play if:
+    // 1. Auto-play is enabled
+    // 2. We're on the current page type
+    // 3. For Details/Summary pages, we're on the correct tab
+    // 4. No modals are open
+    const shouldAutoPlay = () => {
+      if (!autoPlayAudio) return false;
+      if (currentPageRef.current !== pageType) return false;
+      
+      // For Details/Summary pages, check if we're on the correct tab
+      if ((pageType === 'details' || pageType === 'summary') && activeTab !== pageType) {
+        return false;
+      }
+      
+      // Don't play if any modal is open
+      if (isModalOpen) return false;
+      
+      return true;
+    };
+
+    if (shouldAutoPlay()) {
       handlePlay();
     }
-  }, [pageType, autoPlayAudio, content]);
+  }, [pageType, activeTab, autoPlayAudio, content, isModalOpen]);
 
   const handlePlay = () => {
     // Cancel any ongoing speech
