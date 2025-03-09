@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWheelchair, faMoon, faSun, faDesktop, faLaptop } from '@fortawesome/free-solid-svg-icons';
 import { useAccessibility } from '../context/AccessibilityContext';
+import AudioPlayer from './AudioPlayer';
 
 const Accessibility = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

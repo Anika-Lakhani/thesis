@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
+import AudioPlayer from './AudioPlayer';
 
 /**
  * Settings component for managing user preferences
@@ -120,6 +121,8 @@ const Settings = () => {
         >
           <h2>Settings</h2>
           
+          <AudioPlayer pageType="settings" />
+
           <div className="settings-section" role="radiogroup" aria-label="Reading Level">
             <h3>Reading Level</h3>
             <p>Choose the complexity level for privacy policy summaries</p>

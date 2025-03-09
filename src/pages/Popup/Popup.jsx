@@ -21,6 +21,7 @@ import GirlypopLogoDark from "../../assets/logos/girlypop-logo-dark.png";
 import GirlypopLogoLight from "../../assets/logos/girlypop-logo-light.png";
 import SportsAnnouncerLogoDark from "../../assets/logos/sportsannouncer-logo-dark.png";
 import SportsAnnouncerLogoLight from "../../assets/logos/sportsannouncer-logo-light.png";
+import AudioPlayer from './components/AudioPlayer';
 
 const Popup = () => {
   const [loading, setLoading] = useState(false);
@@ -154,6 +155,15 @@ const Popup = () => {
             <div className="content">
               {/* Summary Tab Content */}
               <div className={`tab-content ${activeTab === 'summary' ? 'active' : ''}`}>
+                <AudioPlayer 
+                  pageType="summary"
+                  content={{
+                    riskLevel: analysis?.summary?.riskLevel,
+                    explanation: document.documentElement.getAttribute('data-explanation-format') === 'girlypop' 
+                      ? "This privacy policy is BUTTERY SOFT and SO chic..."
+                      : "This privacy policy appears to follow privacy-friendly practices..."
+                  }}
+                />
                 {analysis && analysis.success ? (
                   <>
                     <RiskMeter riskLevel={analysis.summary.riskLevel} />
@@ -192,6 +202,12 @@ const Popup = () => {
 
               {/* Details Tab Content */}
               <div className={`tab-content ${activeTab === 'details' ? 'active' : ''}`}>
+                <AudioPlayer 
+                  pageType="details"
+                  content={{
+                    details: analysis?.analysis?.detailsText || "No detailed analysis available."
+                  }}
+                />
                 {analysis && analysis.success ? (
                   <PolicyDetails analysis={analysis.analysis} />
                 ) : null}

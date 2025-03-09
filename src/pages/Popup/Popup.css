@@ -742,3 +742,46 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
 .preferences-link {
   font-size: var(--font-size-base);
 }
+
+.audio-player {
+  position: absolute;
+  right: 10px;
+  z-index: 100;
+}
+
+/* Position for Summary and Details pages */
+.summary-audio,
+.details-audio {
+  position: relative;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+/* Position for Settings and Accessibility pages */
+.settings-audio,
+.accessibility-audio {
+  top: 10px;
+}
+
+.audio-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.audio-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .audio-button {
+  color: rgba(232, 234, 237, 0.9);
+}
+
+[data-theme="dark"] .audio-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
