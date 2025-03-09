@@ -4,7 +4,7 @@ import { faWheelchair, faMoon, faSun, faDesktop, faLaptop } from '@fortawesome/f
 import { useAccessibility } from '../context/AccessibilityContext';
 import AudioPlayer from './AudioPlayer';
 
-const Accessibility = () => {
+const Accessibility = ({ isOpen, setIsOpen }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { 
     fontSize, 
@@ -39,16 +39,19 @@ const Accessibility = () => {
   return (
     <div className="accessibility-wrapper" ref={menuRef}>
       <button 
-        className="header-button accessibility-button" 
-        aria-label="Accessibility options"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        aria-expanded={isMenuOpen}
+        className="header-button accessibility-button"
+        onClick={() => setIsOpen(!isOpen)}
       >
         <FontAwesomeIcon icon={faWheelchair} />
       </button>
 
-      {isMenuOpen && (
+      {isOpen && (
         <div className="accessibility-menu">
+          <AudioPlayer 
+            pageType="accessibility"
+            activeTab={null}
+            isModalOpen={isOpen}
+          />
           <h2>Accessibility Options</h2>
           
           <section className="accessibility-section">

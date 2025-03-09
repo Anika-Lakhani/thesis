@@ -7,8 +7,7 @@ import AudioPlayer from './AudioPlayer';
  * Settings component for managing user preferences
  * @returns {React.ReactElement} Settings component
  */
-const Settings = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const Settings = ({ isOpen, setIsOpen }) => {
   const settingsRef = useRef(null);
   const [selectedReadingLevel, setSelectedReadingLevel] = useState('medium');
   const [currentFormat, setCurrentFormat] = useState("default");
@@ -104,25 +103,21 @@ const Settings = () => {
   return (
     <div className="settings-wrapper" ref={settingsRef}>
       <button 
-        className="header-button settings-button" 
+        className="header-button settings-button"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Settings menu"
-        aria-expanded={isOpen}
-        aria-haspopup="true"
       >
         <FontAwesomeIcon icon={faCog} />
       </button>
 
       {isOpen && (
-        <div 
-          className="settings-menu"
-          role="dialog"
-          aria-label="Settings"
-        >
+        <div className="settings-menu">
+          <AudioPlayer 
+            pageType="settings"
+            activeTab={null}
+            isModalOpen={isOpen}
+          />
           <h2>Settings</h2>
           
-          <AudioPlayer pageType="settings" />
-
           <div className="settings-section" role="radiogroup" aria-label="Reading Level">
             <h3>Reading Level</h3>
             <p>Choose the complexity level for privacy policy summaries</p>

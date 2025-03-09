@@ -28,6 +28,8 @@ const Popup = () => {
   const [error, setError] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [activeTab, setActiveTab] = useState('summary');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAccessibilityOpen, setIsAccessibilityOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(DefaultLogoLight);
 
   useEffect(() => {
@@ -120,8 +122,8 @@ const Popup = () => {
           className="popup-logo-regular-dark"
         />
         <div className="popup-header-controls">
-          <Settings />
-          <Accessibility />
+          <Settings isOpen={isSettingsOpen} setIsOpen={setIsSettingsOpen} />
+          <Accessibility isOpen={isAccessibilityOpen} setIsOpen={setIsAccessibilityOpen} />
           <button 
             className="header-button close-button" 
             aria-label="Close popup"
@@ -155,17 +157,35 @@ const Popup = () => {
             <div className="content">
               {/* Summary Tab Content */}
               <div className={`tab-content ${activeTab === 'summary' ? 'active' : ''}`}>
-                <AudioPlayer 
-                  pageType="summary"
-                  content={{
-                    riskLevel: analysis?.summary?.riskLevel,
-                    explanation: document.documentElement.getAttribute('data-explanation-format') === 'girlypop' 
-                      ? "This privacy policy is BUTTERY SOFT and SO chic..."
-                      : "This privacy policy appears to follow privacy-friendly practices..."
-                  }}
-                />
                 {analysis && analysis.success ? (
                   <>
+                    <AudioPlayer 
+                      pageType="summary"
+                      content={{
+                        riskLevel: analysis.summary.riskLevel,
+                        explanation: analysis.summary.riskLevel === 'High' ? (
+                          document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ?
+                            "Babe, YOU'RE DONE 🚩 This website is a total snitch, collecting ALL your data and sharing it with, like, everyone. I think you should def check out the Details tab if you wanna know more, or just dump this website's ass." :
+                          document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ?
+                            "It's looking like a rough game tonight! I'm not really seeing a lot of clean plays out there. The ref is calling a LOT of aggressive data collection fouls, the defense is DOWN and they're sharing data left and right! Head over to the Details tab for the play-by-play!" :
+                            "This privacy policy contains multiple concerning elements that could impact your privacy. We've detected a high number of data collection practices and potential sharing with third parties. Consider reviewing the Details tab for specific concerns."
+                        ) : analysis.summary.riskLevel === 'Medium' ? (
+                          document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ?
+                            "This privacy policy is pretty mid. I'm a girl's girl, so I just wanted to warn you even though they're not like, toxic or anything. Still j check the Details tab if you wanna learn more." :
+                          document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ?
+                            "The game is looking pretty even tonight! We're watching some standard moves we'd expect to see, but keep your eyes on the field! Check out the Details tab for the full strategic breakdown." :
+                            "This privacy policy has some standard data collection practices, but it also includes elements that warrant attention. While not unusually invasive, we recommend reviewing the specific data handling practices in the Details tab."
+                        ) : (
+                          document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ?
+                            "This privacy policy is BUTTERY SOFT and SO chic. When it comes to my data and privacy, I just love a respectful king. Still worth a quick peek at the Details tab though... just in case." :
+                          document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ?
+                            "TOUCHDOWN, PRIVACY FANS! This policy is showing EXCELLENT form with privacy-friendly practices! A STELLAR performance in data protection! MVP performance right here.Take a quick timeout to review the Details tab for the full winning strategy!" :
+                            "This privacy policy appears to follow privacy-friendly practices. It has clear terms and limited data collection. As always, we recommend reviewing the specific details to ensure they align with your privacy preferences."
+                        )
+                      }}
+                      activeTab={activeTab}
+                      isModalOpen={isSettingsOpen || isAccessibilityOpen}
+                    />
                     <RiskMeter riskLevel={analysis.summary.riskLevel} />
                     <div className="risk-explanation">
                       {analysis.summary.riskLevel === 'High' && (
@@ -202,14 +222,18 @@ const Popup = () => {
 
               {/* Details Tab Content */}
               <div className={`tab-content ${activeTab === 'details' ? 'active' : ''}`}>
-                <AudioPlayer 
-                  pageType="details"
-                  content={{
-                    details: analysis?.analysis?.detailsText || "No detailed analysis available."
-                  }}
-                />
                 {analysis && analysis.success ? (
-                  <PolicyDetails analysis={analysis.analysis} />
+                  <>
+                    <AudioPlayer 
+                      pageType="details"
+                      content={{
+                        details: analysis?.analysis?.detailsText || "No detailed analysis available."
+                      }}
+                      activeTab={activeTab}
+                      isModalOpen={isSettingsOpen || isAccessibilityOpen}
+                    />
+                    <PolicyDetails analysis={analysis.analysis} />
+                  </>
                 ) : null}
               </div>
             </div>
