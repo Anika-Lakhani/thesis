@@ -19,13 +19,15 @@ const Accessibility = ({ isOpen, setIsOpen }) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsMenuOpen(false);
+        setIsOpen(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [setIsOpen]);
 
   const handleThemeChange = (newTheme) => {
     setTheme(newTheme);
@@ -39,8 +41,10 @@ const Accessibility = ({ isOpen, setIsOpen }) => {
   return (
     <div className="accessibility-wrapper" ref={menuRef}>
       <button 
-        className="header-button accessibility-button"
+        className="header-button accessibility-button" 
+        aria-label="Accessibility options"
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
       >
         <FontAwesomeIcon icon={faWheelchair} />
       </button>
