@@ -227,7 +227,42 @@ const Popup = () => {
                     <AudioPlayer 
                       pageType="details"
                       content={{
-                        details: analysis?.analysis?.detailsText || "No detailed analysis available."
+                        details: (() => {
+                          console.log("Full analysis object:", analysis);
+                          if (!analysis?.analysis) {
+                            console.log("No analysis found");
+                            return "No detailed analysis available.";
+                          }
+                          try {
+                            // Format each category and its findings into readable text
+                            const categories = [
+                              {
+                                title: "Data collection",
+                                data: analysis.analysis.dataCollection
+                              },
+                              {
+                                title: "Third party sharing",
+                                data: analysis.analysis.thirdPartySharing
+                              },
+                              {
+                                title: "Data security",
+                                data: analysis.analysis.dataSecurity
+                              },
+                              {
+                                title: "User rights",
+                                data: analysis.analysis.userRights
+                              }
+                            ];
+
+                            return categories
+                              .filter(cat => cat.data && Object.keys(cat.data).length > 0)
+                              .map(cat => `${cat.title}: ${JSON.stringify(cat.data)}`)
+                              .join(". ");
+                          } catch (error) {
+                            console.error("Error formatting details:", error);
+                            return "Error formatting analysis details.";
+                          }
+                        })()
                       }}
                       activeTab={activeTab}
                       isModalOpen={isSettingsOpen || isAccessibilityOpen}
