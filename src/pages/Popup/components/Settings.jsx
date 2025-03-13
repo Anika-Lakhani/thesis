@@ -9,17 +9,37 @@ import AudioPlayer from './AudioPlayer';
  */
 const Settings = ({ isOpen, setIsOpen }) => {
   const settingsRef = useRef(null);
-  const [selectedReadingLevel, setSelectedReadingLevel] = useState('medium');
+  const [readingLevel, setReadingLevel] = useState('medium');
   const [currentFormat, setCurrentFormat] = useState("default");
 
   useEffect(() => {
-    // Load saved format on component mount
-    chrome.storage.sync.get(["explanationFormat"], (result) => {
+    // Load saved settings on component mount
+    chrome.storage.sync.get(["explanationFormat", "readingLevel"], (result) => {
       const savedFormat = result.explanationFormat || "default";
+      const savedLevel = result.readingLevel || "medium";
       setCurrentFormat(savedFormat);
+      setReadingLevel(savedLevel);
       document.documentElement.setAttribute("data-explanation-format", savedFormat);
+      document.documentElement.setAttribute("data-reading-level", savedLevel);
     });
   }, []);
+
+  /**
+   * Updates both the explanation format and reading level attributes
+   * @param {string} format - The selected format
+   * @param {string} level - The selected reading level
+   */
+  const updateDisplaySettings = (format, level) => {
+    const combinedFormat = `${format}-${level}`;
+    document.documentElement.setAttribute("data-explanation-format", format);
+    document.documentElement.setAttribute("data-reading-level", level);
+    
+    // Save both preferences to chrome storage
+    chrome.storage.sync.set({ 
+      explanationFormat: format,
+      readingLevel: level 
+    });
+  };
 
   /**
    * Handles changes to the explanation format
@@ -27,10 +47,16 @@ const Settings = ({ isOpen, setIsOpen }) => {
    */
   const handleFormatChange = (format) => {
     setCurrentFormat(format);
-    document.documentElement.setAttribute("data-explanation-format", format);
-    
-    // Save format preference to chrome storage
-    chrome.storage.sync.set({ explanationFormat: format });
+    updateDisplaySettings(format, readingLevel);
+  };
+
+  /**
+   * Handles changes to the reading level
+   * @param {string} level - The selected reading level
+   */
+  const handleReadingLevelChange = (level) => {
+    setReadingLevel(level);
+    updateDisplaySettings(currentFormat, level);
   };
 
   // Handle click outside
@@ -125,10 +151,10 @@ const Settings = ({ isOpen, setIsOpen }) => {
               {readingLevels.map((level) => (
                 <button
                   key={level}
-                  className={`setting-option ${selectedReadingLevel === level ? 'active' : ''}`}
-                  aria-pressed={selectedReadingLevel === level}
-                  onClick={() => setSelectedReadingLevel(level)}
-                  onKeyDown={(e) => handleKeyDown(e, readingLevels, selectedReadingLevel, setSelectedReadingLevel)}
+                  className={`setting-option ${readingLevel === level ? 'active' : ''}`}
+                  aria-pressed={readingLevel === level}
+                  onClick={() => handleReadingLevelChange(level)}
+                  onKeyDown={(e) => handleKeyDown(e, readingLevels, readingLevel, setReadingLevel)}
                 >
                   {level.charAt(0).toUpperCase() + level.slice(1)}
                 </button>

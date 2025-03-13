@@ -22,6 +22,7 @@ import GirlypopLogoLight from "../../assets/logos/girlypop-logo-light.png";
 import SportsAnnouncerLogoDark from "../../assets/logos/sportsannouncer-logo-dark.png";
 import SportsAnnouncerLogoLight from "../../assets/logos/sportsannouncer-logo-light.png";
 import AudioPlayer from './components/AudioPlayer';
+import { getRiskExplanation } from './utils/riskLevelContent';
 
 const Popup = () => {
   const [loading, setLoading] = useState(false);
@@ -31,6 +32,7 @@ const Popup = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAccessibilityOpen, setIsAccessibilityOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(DefaultLogoLight);
+  const [readingLevel, setReadingLevel] = useState('medium');
 
   useEffect(() => {
     // Automatically analyze when popup opens
@@ -56,10 +58,13 @@ const Popup = () => {
   }, []);
 
   useEffect(() => {
-    // Load saved format on mount
-    chrome.storage.sync.get(["explanationFormat"], (result) => {
+    // Load saved settings on mount
+    chrome.storage.sync.get(["explanationFormat", "readingLevel"], (result) => {
       const savedFormat = result.explanationFormat || "default";
+      const savedLevel = result.readingLevel || "medium";
       document.documentElement.setAttribute("data-explanation-format", savedFormat);
+      document.documentElement.setAttribute("data-reading-level", savedLevel);
+      setReadingLevel(savedLevel);
     });
   }, []);
 
@@ -112,6 +117,14 @@ const Popup = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Helper function to get current format and reading level
+  const getCurrentSettings = () => {
+    return {
+      format: document.documentElement.getAttribute('data-explanation-format') || 'default',
+      readingLevel: document.documentElement.getAttribute('data-reading-level') || 'medium'
+    };
+  };
+
   return (
     <AccessibilityProvider>
       <div className="popup-container">
@@ -163,24 +176,10 @@ const Popup = () => {
                       pageType="summary"
                       content={{
                         riskLevel: analysis.summary.riskLevel,
-                        explanation: analysis.summary.riskLevel === 'High' ? (
-                          document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ?
-                            "Babe, YOU'RE DONE 🚩 This website is a total snitch, collecting ALL your data and sharing it with, like, everyone. I think you should def check out the Details tab if you wanna know more, or just dump this website's ass." :
-                          document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ?
-                            "It's looking like a rough game tonight! I'm not really seeing a lot of clean plays out there. The ref is calling a LOT of aggressive data collection fouls, the defense is DOWN and they're sharing data left and right! Head over to the Details tab for the play-by-play!" :
-                            "This privacy policy contains multiple concerning elements that could impact your privacy. We've detected a high number of data collection practices and potential sharing with third parties. Consider reviewing the Details tab for specific concerns."
-                        ) : analysis.summary.riskLevel === 'Medium' ? (
-                          document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ?
-                            "This privacy policy is pretty mid. I'm a girl's girl, so I just wanted to warn you even though they're not like, toxic or anything. Still j check the Details tab if you wanna learn more." :
-                          document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ?
-                            "The game is looking pretty even tonight! We're watching some standard moves we'd expect to see, but keep your eyes on the field! Check out the Details tab for the full strategic breakdown." :
-                            "This privacy policy has some standard data collection practices, but it also includes elements that warrant attention. While not unusually invasive, we recommend reviewing the specific data handling practices in the Details tab."
-                        ) : (
-                          document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ?
-                            "This privacy policy is BUTTERY SOFT and SO chic. When it comes to my data and privacy, I just love a respectful king. Still worth a quick peek at the Details tab though... just in case." :
-                          document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ?
-                            "TOUCHDOWN, PRIVACY FANS! This policy is showing EXCELLENT form with privacy-friendly practices! A STELLAR performance in data protection! MVP performance right here.Take a quick timeout to review the Details tab for the full winning strategy!" :
-                            "This privacy policy appears to follow privacy-friendly practices. It has clear terms and limited data collection. As always, we recommend reviewing the specific details to ensure they align with your privacy preferences."
+                        explanation: getRiskExplanation(
+                          getCurrentSettings().format,
+                          getCurrentSettings().readingLevel,
+                          analysis.summary.riskLevel
                         )
                       }}
                       activeTab={activeTab}
@@ -188,32 +187,10 @@ const Popup = () => {
                     />
                     <RiskMeter riskLevel={analysis.summary.riskLevel} />
                     <div className="risk-explanation">
-                      {analysis.summary.riskLevel === 'High' && (
-                        document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ? (
-                          "Babe, YOU'RE DONE 🚩 This website is a total snitch, collecting ALL your data and sharing it with, like, everyone. I think you should def check out the Details tab if you wanna know more, or just dump this website's ass."
-                        ) : document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ? (
-                          "It's looking like a rough game tonight! I'm not really seeing a lot of clean plays out there. The ref is calling a LOT of aggressive data collection fouls, the defense is DOWN and they're sharing data left and right! Head over to the Details tab for the play-by-play!"
-                        ) : (
-                          "This privacy policy contains multiple concerning elements that could impact your privacy. We've detected a high number of data collection practices and potential sharing with third parties. Consider reviewing the Details tab for specific concerns."
-                        )
-                      )}
-                      {analysis.summary.riskLevel === 'Medium' && (
-                        document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ? (
-                          "This privacy policy is pretty mid. I'm a girl's girl, so I just wanted to warn you even though they're not like, toxic or anything. Still j check the Details tab if you wanna learn more."
-                        ) : document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ? (
-                          "The game is looking pretty even tonight! We're watching some standard moves we'd expect to see, but keep your eyes on the field! Check out the Details tab for the full strategic breakdown."
-                        ) : (
-                          "This privacy policy has some standard data collection practices, but it also includes elements that warrant attention. While not unusually invasive, we recommend reviewing the specific data handling practices in the Details tab."
-                        )
-                      )}
-                      {analysis.summary.riskLevel === 'Low' && (
-                        document.documentElement.getAttribute('data-explanation-format') === 'girlypop' ? (
-                          "This privacy policy is BUTTERY SOFT and SO chic. When it comes to my data and privacy, I just love a respectful king. Still worth a quick peek at the Details tab though... just in case."
-                        ) : document.documentElement.getAttribute('data-explanation-format') === 'sports announcer' ? (
-                          "TOUCHDOWN, PRIVACY FANS! This policy is showing EXCELLENT form with privacy-friendly practices! A STELLAR performance in data protection! MVP performance right here.Take a quick timeout to review the Details tab for the full winning strategy!"
-                        ) : (
-                          "This privacy policy appears to follow privacy-friendly practices. It has clear terms and limited data collection. As always, we recommend reviewing the specific details to ensure they align with your privacy preferences."
-                        )
+                      {analysis && analysis.success && getRiskExplanation(
+                        getCurrentSettings().format,
+                        getCurrentSettings().readingLevel,
+                        analysis.summary.riskLevel
                       )}
                     </div>
                   </>
