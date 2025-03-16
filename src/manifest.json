@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Privacy Policy Analyzer",
+  "name": "OwlGuard Privacy Policy Analyzer",
   "version": "1.0.0",
   "description": "Detects and analyzes privacy policies on webpages",
   "permissions": [
@@ -14,10 +14,15 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icon-16.png",
-      "48": "icon-48.png",
-      "128": "icon-128.png"
+      "16": "assets/icons/icon-16.png",
+      "48": "assets/icons/icon-48.png",
+      "128": "assets/icons/icon-128.png"
     }
+  },
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
   },
   "background": {
     "service_worker": "background.bundle.js"
@@ -25,16 +30,18 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["contentScript.bundle.js"]
+      "js": ["contentScript.bundle.js"],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
     {
       "resources": [
-        "fonts/OpenDyslexic-Regular.woff2",
-        "fonts/OpenDyslexic-Regular.woff",
-        "fonts/OpenDyslexic-Bold.woff2",
-        "fonts/OpenDyslexic-Bold.woff"
+        "assets/images/owl_popup.png",
+        "assets/fonts/OpenDyslexic-Regular.woff2",
+        "assets/fonts/OpenDyslexic-Regular.woff",
+        "assets/fonts/OpenDyslexic-Bold.woff2",
+        "assets/fonts/OpenDyslexic-Bold.woff"
       ],
       "matches": ["<all_urls>"]
     }

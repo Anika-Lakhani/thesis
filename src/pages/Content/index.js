@@ -1,3 +1,7 @@
+console.log("=== PRIVACY POLICY DETECTOR CONTENT SCRIPT STARTING ===");
+console.log("Extension ID:", chrome.runtime.id);
+console.log("Current URL:", window.location.href);
+
 // Force immediate logging when script loads
 (() => {
   // Send a message to the background script for logging
@@ -12,8 +16,6 @@
 })();
 
 console.log("[Privacy Policy Detector] Content script loaded:", window.location.href);
-
-import owlPopup from "../../assets/owl_popup.png";
 
 const PRIVACY_POLICY_PATTERNS = [
   /privacy\s*policy/i,
@@ -130,9 +132,9 @@ const createOwlIndicator = () => {
 
     console.log("[Privacy Policy Detector] Creating owl indicator");
     
-    // Try to get the owl image URL
-    const owlUrl = chrome.runtime.getURL("owl_popup.png");
-    console.log("[Privacy Policy Detector] Owl image URL:", owlUrl);
+    // Get the owl image URL using chrome.runtime.getURL with the correct path
+    const owlUrl = chrome.runtime.getURL("../../assets/images/owl_popup.png");
+    console.log("[Privacy Policy Detector] Attempting to load owl image from:", owlUrl);
 
     const owlDiv = document.createElement("div");
     owlDiv.id = "owlguard-indicator";
@@ -150,15 +152,27 @@ const createOwlIndicator = () => {
       display: block !important;
     `;
 
+    // Create and configure image element
     const owlImg = new Image();
+    
     owlImg.onload = () => {
       console.log("[Privacy Policy Detector] Owl image loaded successfully");
+      owlDiv.appendChild(owlImg);
+      document.body.appendChild(owlDiv);
+      console.log("[Privacy Policy Detector] Owl indicator added to DOM");
     };
+
     owlImg.onerror = (e) => {
       console.error("[Privacy Policy Detector] Failed to load owl image:", e);
+      console.error("[Privacy Policy Detector] Attempted URL:", owlUrl);
+      // Try with a different path as fallback
+      const fallbackUrl = chrome.runtime.getURL("owl_popup.png");
+      console.log("[Privacy Policy Detector] Trying fallback URL:", fallbackUrl);
+      if (fallbackUrl !== owlUrl) {
+        owlImg.src = fallbackUrl;
+      }
     };
-    
-    owlImg.src = owlUrl;
+
     owlImg.alt = "OwlGuard Privacy Policy Detected";
     owlImg.style.cssText = `
       width: 100% !important;
@@ -168,6 +182,10 @@ const createOwlIndicator = () => {
       opacity: 1 !important;
       visibility: visible !important;
     `;
+
+    // Set the source last
+    console.log("[Privacy Policy Detector] Setting owl image source:", owlUrl);
+    owlImg.src = owlUrl;
 
     // Add hover effect
     owlDiv.addEventListener("mouseenter", () => {
@@ -184,19 +202,9 @@ const createOwlIndicator = () => {
       chrome.runtime.sendMessage({ action: "openPopup" });
     });
 
-    owlDiv.appendChild(owlImg);
-    document.body.appendChild(owlDiv);
-    
-    // Verify the owl was added
-    const addedOwl = document.getElementById("owlguard-indicator");
-    if (addedOwl) {
-      console.log("[Privacy Policy Detector] Owl indicator successfully added to DOM");
-    } else {
-      console.error("[Privacy Policy Detector] Failed to find owl indicator after adding to DOM");
-    }
-
   } catch (error) {
     console.error("[Privacy Policy Detector] Error creating owl indicator:", error);
+    console.error("[Privacy Policy Detector] Error stack:", error.stack);
   }
 };
 
@@ -211,9 +219,25 @@ const detectPrivacyPolicy = () => {
 
 // Function to check for privacy policy and show owl
 const checkAndShowOwl = () => {
-  console.log("[Privacy Policy Detector] Checking for privacy policy");
-  if (detectPrivacyPolicy()) {
-    console.log("[Privacy Policy Detector] Privacy policy detected");
+  console.log("[Privacy Policy Detector] Starting privacy policy check");
+  const pageContent = document.body.innerText + " " + document.title;
+  console.log("[Privacy Policy Detector] Page content length:", pageContent.length);
+  
+  // Log some sample content for debugging
+  console.log("[Privacy Policy Detector] First 100 chars:", pageContent.substring(0, 100));
+  
+  const hasPrivacyPolicy = PRIVACY_POLICY_PATTERNS.some(pattern => {
+    const matches = pattern.test(pageContent);
+    if (matches) {
+      console.log("[Privacy Policy Detector] Matched pattern:", pattern);
+    }
+    return matches;
+  });
+
+  console.log("[Privacy Policy Detector] Privacy policy detected:", hasPrivacyPolicy);
+  
+  if (hasPrivacyPolicy) {
+    console.log("[Privacy Policy Detector] Attempting to create owl indicator");
     createOwlIndicator();
     // Notify background script
     chrome.runtime.sendMessage({
@@ -223,18 +247,28 @@ const checkAndShowOwl = () => {
         url: window.location.href
       }]
     });
+  } else {
+    console.log("[Privacy Policy Detector] No privacy policy detected on this page");
   }
 };
 
-// Run on page load
+// Run on page load and after a delay
 if (document.readyState === "complete") {
+  console.log("[Privacy Policy Detector] Document already complete, running check");
   checkAndShowOwl();
 } else {
-  window.addEventListener("load", checkAndShowOwl);
+  console.log("[Privacy Policy Detector] Document not ready, adding load listener");
+  window.addEventListener("load", () => {
+    console.log("[Privacy Policy Detector] Document loaded, running check");
+    checkAndShowOwl();
+  });
 }
 
-// Also run after a short delay to catch dynamically loaded content
-setTimeout(checkAndShowOwl, 1500);
+// Also run after a delay to catch dynamically loaded content
+setTimeout(() => {
+  console.log("[Privacy Policy Detector] Running delayed check");
+  checkAndShowOwl();
+}, 1500);
 
 // Listen for messages from the extension
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {

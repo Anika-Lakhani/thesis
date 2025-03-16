@@ -53,9 +53,9 @@ async function handlePrivacyPolicyDetection(policyLinks, tabId) {
   chrome.action.setIcon({
     tabId,
     path: {
-      16: 'icon-16.png',
-      48: 'icon-48.png',
-      128: 'icon-128.png',
+      16: '/../../assets/icons/icon-16.png',
+      48: '/../../assets/icons/icon-48.png',
+      128: '/../../assets/icons/icon-128.png',
     },
   });
 
