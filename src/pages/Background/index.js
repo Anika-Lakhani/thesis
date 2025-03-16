@@ -30,7 +30,6 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       console.error('Error scraping policy:', error);
       sendResponse({ success: false, error: error.message });
     }
-  // error logging to understand how the extension is finding a privacy policy
   } else if (message.type === "PRIVACY_POLICY_DEBUG") {
     console.log("Privacy Policy Detection Results:", message.payload);
     console.log("URL:", message.payload.url);
@@ -44,6 +43,13 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   } else if (message.type === "DEBUG_LOG") {
     // Log to background script console
     console.log("[Privacy Policy Detector]", message.payload.message, message.payload);
+  } else if (message.type === "OPEN_POPUP" || message.action === "openPopup") {
+    // Handle popup opening
+    try {
+      await chrome.action.openPopup();
+    } catch (error) {
+      console.error("Error opening popup:", error);
+    }
   }
   return true;
 });

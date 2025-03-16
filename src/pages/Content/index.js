@@ -145,11 +145,12 @@ const createOwlIndicator = () => {
       z-index: 2147483647 !important;
       cursor: pointer !important;
       transition: transform 0.3s ease !important;
-      width: 48px !important;
-      height: 48px !important;
+      width: 240px !important;
       background-color: transparent !important;
       pointer-events: auto !important;
-      display: block !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     `;
 
     // Create and configure image element
@@ -157,6 +158,9 @@ const createOwlIndicator = () => {
     
     owlImg.onload = () => {
       console.log("[Privacy Policy Detector] Owl image loaded successfully");
+      // Calculate height based on image aspect ratio
+      const aspectRatio = owlImg.naturalHeight / owlImg.naturalWidth;
+      owlDiv.style.height = `${240 * aspectRatio}px`;
       owlDiv.appendChild(owlImg);
       document.body.appendChild(owlDiv);
       console.log("[Privacy Policy Detector] Owl indicator added to DOM");
@@ -165,22 +169,18 @@ const createOwlIndicator = () => {
     owlImg.onerror = (e) => {
       console.error("[Privacy Policy Detector] Failed to load owl image:", e);
       console.error("[Privacy Policy Detector] Attempted URL:", owlUrl);
-      // Try with a different path as fallback
-      const fallbackUrl = chrome.runtime.getURL("owl_popup.png");
-      console.log("[Privacy Policy Detector] Trying fallback URL:", fallbackUrl);
-      if (fallbackUrl !== owlUrl) {
-        owlImg.src = fallbackUrl;
-      }
     };
 
     owlImg.alt = "OwlGuard Privacy Policy Detected";
     owlImg.style.cssText = `
       width: 100% !important;
-      height: 100% !important;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) !important;
+      height: auto !important;
+      object-fit: contain !important;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3)) !important;
       display: block !important;
-      opacity: 1 !important;
+      opacity: 0.95 !important;
       visibility: visible !important;
+      transition: transform 0.3s ease !important;
     `;
 
     // Set the source last
@@ -196,10 +196,14 @@ const createOwlIndicator = () => {
       owlDiv.style.transform = "scale(1)";
     });
 
-    // Open extension popup when clicked
+    // Click handler to open popup
     owlDiv.addEventListener("click", () => {
       console.log("[Privacy Policy Detector] Owl clicked");
+      // Try both message formats to ensure compatibility
       chrome.runtime.sendMessage({ action: "openPopup" });
+      chrome.runtime.sendMessage({ type: "OPEN_POPUP" });
+      // As a fallback, try opening the popup directly
+      chrome.action.openPopup();
     });
 
   } catch (error) {
