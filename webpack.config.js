@@ -38,7 +38,11 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        exclude: /assets[\\/]icons/,
         type: 'asset/resource',
+        generator: {
+          filename: 'assets/images/[name][ext]'
+        }
       },
     ]
   },
@@ -51,11 +55,14 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/manifest.json' },
-        { from: 'src/assets/icons/icon-16.png', to: 'assets/icons/icon-16.png' },
-        { from: 'src/assets/icons/icon-48.png', to: 'assets/icons/icon-48.png' },
-        { from: 'src/assets/icons/icon-128.png', to: 'assets/icons/icon-128.png' },
-        { from: 'src/assets/icons/icon-34.png', to: 'assets/icons/icon-34.png' },
-        { from: 'src/assets/images/owl_popup.png', to: 'assets/images/owl_popup.png' },
+        { 
+          from: 'src/assets/icons',
+          to: 'assets/icons'
+        },
+        { 
+          from: 'src/assets/images/owl_popup.png',
+          to: 'assets/images/owl_popup.png'
+        },
         { 
           from: 'public/fonts/OpenDyslexic-Regular.woff2',
           to: 'fonts/OpenDyslexic-Regular.woff2'

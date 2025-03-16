@@ -56,14 +56,29 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
 async function handlePrivacyPolicyDetection(policyLinks, tabId) {
   // Show icon to indicate privacy policy was found
-  chrome.action.setIcon({
-    tabId,
-    path: {
-      16: '/../../assets/icons/icon-16.png',
-      48: '/../../assets/icons/icon-48.png',
-      128: '/../../assets/icons/icon-128.png',
-    },
-  });
+  try {
+    await chrome.action.setIcon({
+      tabId,
+      path: {
+        "16": "../../assets/icons/icon-16.png",
+        "48": "../../assets/icons/icon-48.png",
+        "128": "../../assets/icons/icon-128.png"
+      }
+    });
+  } catch (error) {
+    console.error("Error setting icon:", error);
+    // Fallback to just the 16px icon if others fail
+    try {
+      await chrome.action.setIcon({
+        tabId,
+        path: {
+          "16": "../../assets/icons/icon-16.png"
+        }
+      });
+    } catch (fallbackError) {
+      console.error("Error setting fallback icon:", fallbackError);
+    }
+  }
 
   // Store the links for this tab
   chrome.storage.local.set({
