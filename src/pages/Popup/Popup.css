@@ -814,3 +814,68 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
   color: white;
   border-color: #1a73e8;
 }
+
+.readability-score {
+  margin: 20px auto;
+  padding: 16px;
+  text-align: center;
+  max-width: 400px;
+}
+
+.readability-title {
+  font-size: var(--font-size-h3);
+  font-weight: bold;
+  margin-bottom: 40px;  /* Increased from 20px to 40px */
+  color: var(--text-primary);
+  padding-bottom: 10px;  /* Added padding to further separate from content below */
+}
+
+.readability-bar-container {
+  position: relative;
+  margin: 45px 0 16px 0;  /* Increased top margin */
+}
+
+.readability-score-value {
+  position: absolute;
+  font-size: var(--font-size-h3);
+  font-weight: bold;
+  color: var(--text-primary);
+  bottom: calc(100% + 25px);
+  transform: translateX(-50%);
+  margin: 0;
+  white-space: nowrap;
+  z-index: 2;  /* Ensure score stays above other elements */
+}
+
+.readability-ticker {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 14px solid #000;
+  bottom: 100%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.readability-bar {
+  position: relative;
+  height: 12px;
+  background: linear-gradient(to right, #F44336, #FFC107, #4CAF50);
+  border-radius: 6px;
+}
+
+.readability-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.readability-level {
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  margin: 0;
+}

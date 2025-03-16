@@ -1,0 +1,6 @@
+{
+  "web_accessible_resources": [{
+    "resources": ["owl_popup.png"],
+    "matches": ["<all_urls>"]
+  }]
+}

@@ -13,6 +13,8 @@
 
 console.log("[Privacy Policy Detector] Content script loaded:", window.location.href);
 
+import owlPopup from "../../assets/owl_popup.png";
+
 const PRIVACY_POLICY_PATTERNS = [
   /privacy\s*policy/i,
   /privacy\s*notice/i,
@@ -115,11 +117,130 @@ if (policyLinks.length > 0) {
   });
 }
 
-// Listen for analysis requests from popup
+/**
+ * Creates and displays the owl indicator when a privacy policy is detected
+ */
+const createOwlIndicator = () => {
+  try {
+    // Check if owl indicator already exists
+    if (document.getElementById("owlguard-indicator")) {
+      console.log("[Privacy Policy Detector] Owl indicator already exists");
+      return;
+    }
+
+    console.log("[Privacy Policy Detector] Creating owl indicator");
+    
+    // Try to get the owl image URL
+    const owlUrl = chrome.runtime.getURL("owl_popup.png");
+    console.log("[Privacy Policy Detector] Owl image URL:", owlUrl);
+
+    const owlDiv = document.createElement("div");
+    owlDiv.id = "owlguard-indicator";
+    owlDiv.style.cssText = `
+      position: fixed !important;
+      top: 20px !important;
+      right: 20px !important;
+      z-index: 2147483647 !important;
+      cursor: pointer !important;
+      transition: transform 0.3s ease !important;
+      width: 48px !important;
+      height: 48px !important;
+      background-color: transparent !important;
+      pointer-events: auto !important;
+      display: block !important;
+    `;
+
+    const owlImg = new Image();
+    owlImg.onload = () => {
+      console.log("[Privacy Policy Detector] Owl image loaded successfully");
+    };
+    owlImg.onerror = (e) => {
+      console.error("[Privacy Policy Detector] Failed to load owl image:", e);
+    };
+    
+    owlImg.src = owlUrl;
+    owlImg.alt = "OwlGuard Privacy Policy Detected";
+    owlImg.style.cssText = `
+      width: 100% !important;
+      height: 100% !important;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) !important;
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    `;
+
+    // Add hover effect
+    owlDiv.addEventListener("mouseenter", () => {
+      owlDiv.style.transform = "scale(1.1)";
+    });
+
+    owlDiv.addEventListener("mouseleave", () => {
+      owlDiv.style.transform = "scale(1)";
+    });
+
+    // Open extension popup when clicked
+    owlDiv.addEventListener("click", () => {
+      console.log("[Privacy Policy Detector] Owl clicked");
+      chrome.runtime.sendMessage({ action: "openPopup" });
+    });
+
+    owlDiv.appendChild(owlImg);
+    document.body.appendChild(owlDiv);
+    
+    // Verify the owl was added
+    const addedOwl = document.getElementById("owlguard-indicator");
+    if (addedOwl) {
+      console.log("[Privacy Policy Detector] Owl indicator successfully added to DOM");
+    } else {
+      console.error("[Privacy Policy Detector] Failed to find owl indicator after adding to DOM");
+    }
+
+  } catch (error) {
+    console.error("[Privacy Policy Detector] Error creating owl indicator:", error);
+  }
+};
+
+/**
+ * Checks if the current page contains a privacy policy
+ * @returns {boolean} True if a privacy policy is detected
+ */
+const detectPrivacyPolicy = () => {
+  const pageContent = document.body.innerText + " " + document.title;
+  return PRIVACY_POLICY_PATTERNS.some(pattern => pattern.test(pageContent));
+};
+
+// Function to check for privacy policy and show owl
+const checkAndShowOwl = () => {
+  console.log("[Privacy Policy Detector] Checking for privacy policy");
+  if (detectPrivacyPolicy()) {
+    console.log("[Privacy Policy Detector] Privacy policy detected");
+    createOwlIndicator();
+    // Notify background script
+    chrome.runtime.sendMessage({
+      type: 'PRIVACY_POLICY_DETECTED',
+      payload: [{
+        text: `${window.location.hostname} Privacy Policy`,
+        url: window.location.href
+      }]
+    });
+  }
+};
+
+// Run on page load
+if (document.readyState === "complete") {
+  checkAndShowOwl();
+} else {
+  window.addEventListener("load", checkAndShowOwl);
+}
+
+// Also run after a short delay to catch dynamically loaded content
+setTimeout(checkAndShowOwl, 1500);
+
+// Listen for messages from the extension
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "analyze") {
-    const text = document.body.innerText;
-    sendResponse({ text });
+    const policyText = document.body.innerText;
+    sendResponse({ text: policyText });
   }
   return true;
 });

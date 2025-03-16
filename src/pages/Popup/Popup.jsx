@@ -45,6 +45,7 @@ const Popup = () => {
         if (response && response.text) {
           const analyzer = new JsPolipy();
           const results = await analyzer.analyzePolicy(response.text);
+          console.log('Analysis results:', results);
           setAnalysis(results);
         } else {
           setError('No privacy policy detected');
@@ -125,6 +126,8 @@ const Popup = () => {
     };
   };
 
+  console.log('Readability data:', analysis?.analysis?.readability);
+
   return (
     <AccessibilityProvider>
       <div className="popup-container">
@@ -193,6 +196,33 @@ const Popup = () => {
                         analysis.summary.riskLevel
                       )}
                     </div>
+                    {analysis?.readability && (
+                      <div className="readability-score">
+                        <div className="readability-title">Readability Score</div>
+                        <div className="readability-bar-container">
+                          <div 
+                            className="readability-score-value"
+                            style={{ 
+                              left: `${Math.min(100, Math.max(0, analysis.readability.score))}%`
+                            }}
+                          >
+                            {analysis.readability.score.toFixed(1)}
+                          </div>
+                          <div 
+                            className="readability-ticker"
+                            style={{ 
+                              left: `${Math.min(100, Math.max(0, analysis.readability.score))}%`
+                            }}
+                          />
+                          <div className="readability-bar" />
+                        </div>
+                        <div className="readability-text-container">
+                          <div className="readability-level">
+                            {analysis.readability.level}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </>
                 ) : null}
               </div>
