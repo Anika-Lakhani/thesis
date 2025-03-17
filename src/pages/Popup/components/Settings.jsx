@@ -180,13 +180,6 @@ const Settings = ({ isOpen, setIsOpen }) => {
             </div>
           </div>
 
-          <a 
-            href="#" 
-            className="preferences-link"
-            onClick={(e) => e.preventDefault()}
-          >
-            Click here to update your usage preferences for the extension
-          </a>
         </div>
       )}
     </div>
