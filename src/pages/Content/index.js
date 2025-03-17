@@ -132,9 +132,10 @@ const createOwlIndicator = () => {
 
     console.log("[Privacy Policy Detector] Creating owl indicator");
     
-    // Get the owl image URL using chrome.runtime.getURL with the correct path
-    const owlUrl = chrome.runtime.getURL("../../assets/images/owl_popup.png");
-    console.log("[Privacy Policy Detector] Attempting to load owl image from:", owlUrl);
+    // Get both owl image URLs
+    const defaultOwlUrl = chrome.runtime.getURL("../../assets/images/owl_popup.png");
+    const hoverOwlUrl = chrome.runtime.getURL("../../assets/images/owl_hover.png");
+    console.log("[Privacy Policy Detector] Loading owl images from:", defaultOwlUrl, hoverOwlUrl);
 
     const owlDiv = document.createElement("div");
     owlDiv.id = "owlguard-indicator";
@@ -164,11 +165,15 @@ const createOwlIndicator = () => {
       owlDiv.appendChild(owlImg);
       document.body.appendChild(owlDiv);
       console.log("[Privacy Policy Detector] Owl indicator added to DOM");
+
+      // Preload hover image
+      const preloadHoverImg = new Image();
+      preloadHoverImg.src = hoverOwlUrl;
     };
 
     owlImg.onerror = (e) => {
       console.error("[Privacy Policy Detector] Failed to load owl image:", e);
-      console.error("[Privacy Policy Detector] Attempted URL:", owlUrl);
+      console.error("[Privacy Policy Detector] Attempted URL:", defaultOwlUrl);
     };
 
     owlImg.alt = "OwlGuard Privacy Policy Detected";
@@ -180,30 +185,28 @@ const createOwlIndicator = () => {
       display: block !important;
       opacity: 0.95 !important;
       visibility: visible !important;
-      transition: transform 0.3s ease !important;
+      transition: all 0.3s ease !important;
     `;
 
     // Set the source last
-    console.log("[Privacy Policy Detector] Setting owl image source:", owlUrl);
-    owlImg.src = owlUrl;
+    console.log("[Privacy Policy Detector] Setting owl image source:", defaultOwlUrl);
+    owlImg.src = defaultOwlUrl;
 
-    // Add hover effect
+    // Add hover effect with image swap
     owlDiv.addEventListener("mouseenter", () => {
       owlDiv.style.transform = "scale(1.1)";
+      owlImg.src = hoverOwlUrl;
     });
 
     owlDiv.addEventListener("mouseleave", () => {
       owlDiv.style.transform = "scale(1)";
+      owlImg.src = defaultOwlUrl;
     });
 
     // Click handler to open popup
     owlDiv.addEventListener("click", () => {
       console.log("[Privacy Policy Detector] Owl clicked");
-      // Try both message formats to ensure compatibility
-      chrome.runtime.sendMessage({ action: "openPopup" });
       chrome.runtime.sendMessage({ type: "OPEN_POPUP" });
-      // As a fallback, try opening the popup directly
-      chrome.action.openPopup();
     });
 
   } catch (error) {

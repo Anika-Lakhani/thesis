@@ -64,6 +64,10 @@ module.exports = {
           to: 'assets/images/owl_popup.png'
         },
         { 
+          from: 'src/assets/images/owl_hover.png',
+          to: 'assets/images/owl_hover.png'
+        },
+        { 
           from: 'public/fonts/OpenDyslexic-Regular.woff2',
           to: 'fonts/OpenDyslexic-Regular.woff2'
         },
