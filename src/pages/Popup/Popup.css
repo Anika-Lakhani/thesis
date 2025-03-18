@@ -1003,3 +1003,80 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
 .custom-modal button:hover {
   background-color: #1557b0;
 }
+
+/* Name input styles */
+.name-input-container {
+  margin-top: 16px;
+}
+
+.name-input-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-color);
+  font-size: var(--font-size-base);
+}
+
+.name-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.name-input-group input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: var(--font-size-base);
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+.name-input-group input::placeholder {
+  color: rgba(95, 99, 104, 0.7);
+}
+
+.name-input-group .save-button {
+  padding: 8px 16px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: all 0.2s ease;
+  min-width: 64px; /* Ensure consistent width between states */
+}
+
+.name-input-group .save-button:hover {
+  background-color: #1557b0;
+}
+
+/* Saved state styles */
+.name-input-group .save-button.saved {
+  background-color: #34a853; /* Google green for success */
+  font-size: 18px; /* Slightly larger for the checkmark */
+}
+
+.name-input-group .save-button.saved:hover {
+  background-color: #2d9144;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .name-input-group .save-button.saved {
+  background-color: #81c995; /* Lighter green for dark mode */
+}
+
+[data-theme="dark"] .name-input-group .save-button.saved:hover {
+  background-color: #5bb974;
+}
+
+/* Dark mode styles */
+[data-theme="dark"] .name-input-group input {
+  border-color: var(--border-color);
+  background-color: var(--button-bg);
+}
+
+[data-theme="dark"] .name-input-group input::placeholder {
+  color: rgba(232, 234, 237, 0.7);
+}

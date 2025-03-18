@@ -11,14 +11,24 @@ const Settings = ({ isOpen, setIsOpen }) => {
   const settingsRef = useRef(null);
   const [readingLevel, setReadingLevel] = useState('medium');
   const [currentFormat, setCurrentFormat] = useState("default");
+  const [includeName, setIncludeName] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [savedName, setSavedName] = useState(""); // Track the last saved name
+  const [isSaved, setIsSaved] = useState(true); // Track save state
 
   useEffect(() => {
     // Load saved settings on component mount
-    chrome.storage.sync.get(["explanationFormat", "readingLevel"], (result) => {
+    chrome.storage.sync.get(["explanationFormat", "readingLevel", "includeName", "userName"], (result) => {
       const savedFormat = result.explanationFormat || "default";
       const savedLevel = result.readingLevel || "medium";
+      const savedIncludeName = result.includeName || false;
+      const savedUserName = result.userName || "";
       setCurrentFormat(savedFormat);
       setReadingLevel(savedLevel);
+      setIncludeName(savedIncludeName);
+      setUserName(savedUserName);
+      setSavedName(savedUserName); // Initialize savedName
+      setIsSaved(true); // Initially set as saved
       document.documentElement.setAttribute("data-explanation-format", savedFormat);
       document.documentElement.setAttribute("data-reading-level", savedLevel);
     });
@@ -57,6 +67,18 @@ const Settings = ({ isOpen, setIsOpen }) => {
   const handleReadingLevelChange = (level) => {
     setReadingLevel(level);
     updateDisplaySettings(currentFormat, level);
+  };
+
+  const handleNameChange = (e) => {
+    const newName = e.target.value;
+    setUserName(newName);
+    setIsSaved(newName === savedName); // Compare with last saved name
+  };
+
+  const handleNameSave = () => {
+    chrome.storage.sync.set({ userName });
+    setSavedName(userName); // Update the saved name
+    setIsSaved(true);
   };
 
   // Handle click outside
@@ -180,6 +202,53 @@ const Settings = ({ isOpen, setIsOpen }) => {
             </div>
           </div>
 
+          {/* New Petition Settings Section */}
+          <div className="settings-section">
+            <h3>Petition Settings</h3>
+            <p>Do you want to include your name when signing petitions advocating for the improvement of privacy policies?</p>
+            <div className="button-group">
+              <button 
+                className={`setting-option ${!includeName ? 'active' : ''}`}
+                onClick={() => {
+                  setIncludeName(false);
+                  chrome.storage.sync.set({ includeName: false });
+                }}
+              >
+                Stay anonymous
+              </button>
+              <button 
+                className={`setting-option ${includeName ? 'active' : ''}`}
+                onClick={() => {
+                  setIncludeName(true);
+                  chrome.storage.sync.set({ includeName: true });
+                }}
+              >
+                Include my name
+              </button>
+            </div>
+
+            {includeName && (
+              <div className="name-input-container">
+                <label htmlFor="userName">Type your name as you want it to be displayed:</label>
+                <div className="name-input-group">
+                  <input
+                    type="text"
+                    id="userName"
+                    value={userName}
+                    onChange={handleNameChange}
+                    placeholder="Name here..."
+                  />
+                  <button 
+                    className={`save-button ${isSaved ? 'saved' : ''}`}
+                    onClick={handleNameSave}
+                    aria-label={isSaved ? "Name saved" : "Save name"}
+                  >
+                    {isSaved ? "✓" : "Save"}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
