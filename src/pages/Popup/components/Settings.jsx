@@ -75,6 +75,10 @@ const Settings = ({ isOpen, setIsOpen }) => {
     setIsSaved(newName === savedName); // Compare with last saved name
   };
 
+  /**
+   * Saves the current name to chrome storage
+   * Updates visual state to show saved status with checkmark
+   */
   const handleNameSave = () => {
     chrome.storage.sync.set({ userName });
     setSavedName(userName); // Update the saved name
