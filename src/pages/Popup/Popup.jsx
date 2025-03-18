@@ -175,6 +175,12 @@ const Popup = () => {
               <div className={`tab-content ${activeTab === 'summary' ? 'active' : ''}`}>
                 {analysis && analysis.success ? (
                   <>
+                    <button 
+                      className="advocate-button"
+                      onClick={() => alert("You have successfully supported a petition to improve this privacy policy! Thank you for your advocacy work!")}
+                    >
+                      Advocate for Improvements
+                    </button>
                     <AudioPlayer 
                       pageType="summary"
                       content={{

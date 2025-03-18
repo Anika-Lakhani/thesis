@@ -879,3 +879,96 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
   color: var(--text-primary);
   margin: 0;
 }
+
+.advocate-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  padding: 10px 20px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  width: fit-content;
+}
+
+.advocate-button:hover {
+  background-color: #1557b0;
+}
+
+/* Dark mode specific styles for advocate button */
+[data-theme="dark"] .advocate-button {
+  background-color: white;
+  color: #A35214;  /* This matches the brown background color from the screenshot */
+}
+
+[data-theme="dark"] .advocate-button:hover {
+  background-color: #f8f9fa;
+  color: #A35214;
+}
+
+/* Custom Modal Styles */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.custom-modal {
+  background-color: var(--background-color);
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-modal img {
+  width: 80px;
+  height: auto;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+.custom-modal h2 {
+  margin: 0 0 12px;
+  color: var(--text-color);
+  font-size: var(--font-size-h2);
+}
+
+.custom-modal p {
+  margin: 0 0 20px;
+  color: var(--text-color);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+
+.custom-modal button {
+  padding: 8px 24px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s;
+}
+
+.custom-modal button:hover {
+  background-color: #1557b0;
+}
