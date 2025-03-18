@@ -58,5 +58,48 @@ export const categories = {
         ],
         risk: 'medium',
         importance: 'high'
+    },
+    dataUsagePurpose: {
+        patterns: [
+            // High-risk patterns
+            /profil(?:e|ing)\s+(?:your|user)\s+(?:data|behavior)/i,
+            /track(?:ing)?\s+(?:your|user)\s+(?:behavior|activity)/i,
+            /behavior(?:al)?\s+(?:analysis|tracking)/i,
+            /location\s+(?:track(?:ing)?|monitor(?:ing)?)/i,
+            /automat(?:ic|ed)\s+decision[s]?\s+making/i,
+            /target(?:ed)?\s+(?:advertis(?:ing|ements)|market(?:ing)?)/i,
+            /sell(?:ing)?\s+(?:your|user)?\s+(?:data|information)/i,
+
+            // Medium-risk patterns
+            /use[ds]?\s+(?:your|the)\s+(?:data|information)\s+for\s+marketing/i,
+            /personalize[d]?\s+(?:content|experience|service)/i,
+            /improve\s+(?:our|the)\s+(?:service|product|platform)/i,
+            /research\s+(?:and)?\s+(?:development|analytics)/i,
+            /aggregate[d]?\s+(?:statistics|analytics)/i,
+
+            // Low-risk patterns
+            /provide\s+(?:the|our)\s+(?:service|product)/i,
+            /process(?:ing)?\s+(?:your)?\s+(?:order|payment)/i,
+            /customer\s+(?:service|support)/i,
+            /security\s+purposes?/i,
+            /prevent(?:ing)?\s+fraud/i,
+            /legal\s+(?:obligations?|requirements?)/i
+        ],
+        risk: 'medium', // Base risk level
+        importance: 'high',
+        // Additional risk assessment logic
+        assessRisk: (matches) => {
+            // High-risk patterns are 0-6
+            const highRiskMatches = matches.slice(0, 7).some(m => m);
+            // Medium-risk patterns are 7-11
+            const mediumRiskMatches = matches.slice(7, 12).some(m => m);
+            // Low-risk patterns are 12-17
+            const lowRiskMatches = matches.slice(12).some(m => m);
+
+            if (highRiskMatches) return 'high';
+            if (mediumRiskMatches) return 'medium';
+            if (lowRiskMatches) return 'low';
+            return 'medium'; // Default risk level
+        }
     }
 }

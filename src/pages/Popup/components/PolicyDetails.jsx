@@ -35,6 +35,10 @@ const PRIVACY_TOOLTIPS = {
   legalBasis: {
     title: "Legal Basis",
     description: "The legal grounds for collecting and processing your personal data."
+  },
+  dataUsagePurpose: {
+    title: "Purpose of Data Usage",
+    description: "The specific reasons and purposes for which your personal data is collected and used, including service improvement, personalization, and marketing."
   }
 };
 
@@ -143,7 +147,10 @@ const PolicyDetails = ({ analysis }) => {
         : "Security measures in place",
       userRights: "User controls available for data management",
       dataRetention: "Data retention policies specified",
-      cookies: "Uses cookies and tracking technologies"
+      cookies: "Uses cookies and tracking technologies",
+      dataUsagePurpose: findings.length > 0 
+        ? `Data used for: ${findings[0].match}`
+        : "Purpose of data usage specified"
     };
     return messages[category] || `${category} policies detected`;
   };

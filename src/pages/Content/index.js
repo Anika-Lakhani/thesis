@@ -73,6 +73,7 @@ function findPrivacyPolicy() {
     }
   });
   
+  // Check for privacy policy patterns
   for (const link of links) {
     const text = (link.textContent || "").toLowerCase();
     
@@ -92,7 +93,7 @@ function findPrivacyPolicy() {
   chrome.runtime.sendMessage({
     type: "DEBUG_LOG",
     payload: {
-      message: matchedPatterns.length > 0 ? "Matches found" : "No matches found",
+      message: "Matches found",
       url: window.location.href,
       timestamp: new Date().toISOString(),
       matches: matchedPatterns

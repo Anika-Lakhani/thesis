@@ -20,8 +20,8 @@
   --font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: transparent !important;
   --risk-high-bg: rgba(255, 0, 0, 0.556);
-  --risk-medium-bg: rgba(255, 208, 0, 0.557);
-  --risk-low-bg: rgba(0, 255, 0, 0.557);
+  --risk-medium-bg: rgba(255, 208, 0, 0.716);
+  --risk-low-bg: rgba(0, 179, 0, 0.557);
 }
 
 /* Style the html and body */
@@ -51,9 +51,9 @@ html, body {
   --details-warning-bg: rgba(255, 167, 38, 0.15);
   --details-success-bg: rgba(76, 175, 80, 0.15);
   --details-border: #3c4043;
-  --risk-high-bg: rgba(183, 28, 28, 0.35);
-  --risk-medium-bg: rgba(255, 167, 38, 0.35);
-  --risk-low-bg: rgba(76, 175, 80, 0.35);
+  --risk-high-bg: rgba(183, 28, 28, 0.678);
+  --risk-medium-bg: rgba(255, 168, 38, 0.678);
+  --risk-low-bg: rgba(76, 175, 80, 0.678);
 }
 
 .popup-container {
