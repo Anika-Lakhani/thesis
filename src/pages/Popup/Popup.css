@@ -880,14 +880,13 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
   margin: 0;
 }
 
+/* Base advocate button styles */
 .advocate-button {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px;
   padding: 10px 20px;
-  background-color: #1a73e8;
-  color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
@@ -896,21 +895,53 @@ h1, h2, h3, h4, h5, h6, p, span, div, button {
   font-size: var(--font-size-base);
   font-weight: bold;
   width: fit-content;
+  color: white;
 }
 
-.advocate-button:hover {
-  background-color: #1557b0;
+/* Light mode theme-specific styles */
+[data-explanation-format="default"] .advocate-button {
+  background-color: #23637a;
 }
 
-/* Dark mode specific styles for advocate button */
+[data-explanation-format="default"] .advocate-button:hover {
+  background-color: #1b4d5f;
+}
+
+[data-explanation-format="girlypop"] .advocate-button {
+  background-color: #f249a0;
+}
+
+[data-explanation-format="girlypop"] .advocate-button:hover {
+  background-color: #d93c8a;
+}
+
+[data-explanation-format="sports announcer"] .advocate-button {
+  background-color: #a35214;
+}
+
+[data-explanation-format="sports announcer"] .advocate-button:hover {
+  background-color: #8a4510;
+}
+
+/* Dark mode theme-specific styles */
 [data-theme="dark"] .advocate-button {
   background-color: white;
-  color: #A35214;  /* This matches the brown background color from the screenshot */
+}
+
+[data-theme="dark"][data-explanation-format="default"] .advocate-button {
+  color: #23637a;
+}
+
+[data-theme="dark"][data-explanation-format="girlypop"] .advocate-button {
+  color: #f249a0;
+}
+
+[data-theme="dark"][data-explanation-format="sports announcer"] .advocate-button {
+  color: #a35214;
 }
 
 [data-theme="dark"] .advocate-button:hover {
   background-color: #f8f9fa;
-  color: #A35214;
 }
 
 /* Custom Modal Styles */

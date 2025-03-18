@@ -21,8 +21,25 @@ import GirlypopLogoDark from "../../assets/logos/girlypop-logo-dark.png";
 import GirlypopLogoLight from "../../assets/logos/girlypop-logo-light.png";
 import SportsAnnouncerLogoDark from "../../assets/logos/sportsannouncer-logo-dark.png";
 import SportsAnnouncerLogoLight from "../../assets/logos/sportsannouncer-logo-light.png";
+import OwlWings from "../../assets/images/owl_wings.png";
 import AudioPlayer from './components/AudioPlayer';
 import { getRiskExplanation } from './utils/riskLevelContent';
+
+// Custom Modal Component
+const CustomModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="custom-modal-overlay" onClick={onClose}>
+      <div className="custom-modal" onClick={e => e.stopPropagation()}>
+        <img src={OwlWings} alt="OwlGuard" />
+        <h2>OwlGuard Privacy Policy Analyzer says</h2>
+        <p>You have successfully supported a petition to improve this privacy policy! Thank you for your advocacy work!</p>
+        <button onClick={onClose}>OK</button>
+      </div>
+    </div>
+  );
+};
 
 const Popup = () => {
   const [loading, setLoading] = useState(false);
@@ -33,6 +50,7 @@ const Popup = () => {
   const [isAccessibilityOpen, setIsAccessibilityOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(DefaultLogoLight);
   const [readingLevel, setReadingLevel] = useState('medium');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // Automatically analyze when popup opens
@@ -177,10 +195,14 @@ const Popup = () => {
                   <>
                     <button 
                       className="advocate-button"
-                      onClick={() => alert("You have successfully supported a petition to improve this privacy policy! Thank you for your advocacy work!")}
+                      onClick={() => setIsModalOpen(true)}
                     >
                       Advocate for Improvements
                     </button>
+                    <CustomModal 
+                      isOpen={isModalOpen} 
+                      onClose={() => setIsModalOpen(false)} 
+                    />
                     <AudioPlayer 
                       pageType="summary"
                       content={{
