@@ -1,5 +1,42 @@
 import React from 'react';
 import { useAccessibility } from '../context/AccessibilityContext';
+import './PolicyDetails.css';
+
+// Define tooltips for each privacy policy component
+const PRIVACY_TOOLTIPS = {
+  dataCollection: {
+    title: "Data Collection",
+    description: "Information about what personal data the website collects from users, including but not limited to email addresses, names, location data, and browsing behavior."
+  },
+  thirdPartySharing: {
+    title: "Third Party Sharing",
+    description: "Details about how and with whom your personal information might be shared, including partners, advertisers, or service providers."
+  },
+  dataSecurity: {
+    title: "Data Security",
+    description: "Measures and practices used to protect your personal information from unauthorized access, breaches, or misuse."
+  },
+  userRights: {
+    title: "User Rights",
+    description: "Your rights regarding your personal data, including access, correction, deletion, and data portability options."
+  },
+  dataRetention: {
+    title: "Data Retention",
+    description: "How long your personal information is kept and the criteria used to determine the retention period."
+  },
+  cookies: {
+    title: "Cookies & Tracking",
+    description: "Information about how the website uses cookies and other tracking technologies to collect and store data."
+  },
+  dataProcessing: {
+    title: "Data Processing",
+    description: "How your personal information is used, processed, and for what purposes."
+  },
+  legalBasis: {
+    title: "Legal Basis",
+    description: "The legal grounds for collecting and processing your personal data."
+  }
+};
 
 const PolicyDetails = ({ analysis }) => {
   const { theme } = useAccessibility();
@@ -120,19 +157,47 @@ const PolicyDetails = ({ analysis }) => {
     }
   };
 
+  const renderTooltip = (category) => {
+    const tooltip = PRIVACY_TOOLTIPS[category];
+    if (!tooltip) return null;
+
+    return (
+      <div className="tooltip-content">
+        <h4>{tooltip.title}</h4>
+        <p>{tooltip.description}</p>
+      </div>
+    );
+  };
+
+  const renderDetailsRow = (category, data, level = "medium") => {
+    if (!data || Object.keys(data).length === 0) return null;
+
+    const effectiveRisk = getEffectiveRisk(data);
+    const formattedRisk = getFormattedRiskLevel(effectiveRisk);
+    const icon = getIcon(effectiveRisk);
+
+    return (
+      <div className={`details-row ${getRiskClass(effectiveRisk)}`} key={category}>
+        <div className="tooltip-container">
+          <div className="detail-content">
+            <h3>
+              {icon} {PRIVACY_TOOLTIPS[category]?.title || formatCategoryName(category)}
+            </h3>
+            <div className="risk-indicator">
+              Risk Level: {formattedRisk}
+            </div>
+          </div>
+          {renderTooltip(category)}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="policy-details">
-      {sortedCategories.map(([category, categoryData]) => {
-        const effectiveRisk = getEffectiveRisk(categoryData);
-        const emoji = getIcon(effectiveRisk);
-        const text = getFormatText(category, categoryData);
-        return (
-          <div className={`details-row ${getRiskClass(effectiveRisk)}`}>
-            <span className="details-row-emoji">{emoji}&nbsp;</span>
-            <span className="details-row-text">{text}</span>
-          </div>
-        );
-      })}
+      {sortedCategories.map(([category, data]) => 
+        renderDetailsRow(category, data, data.risk)
+      )}
     </div>
   );
 };

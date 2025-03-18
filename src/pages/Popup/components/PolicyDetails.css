@@ -1,0 +1,138 @@
+.policy-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.details-row {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: var(--details-row-bg);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tooltip-container {
+  position: relative;
+  width: 100%;
+}
+
+.tooltip-container:hover .tooltip-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.detail-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-content h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: var(--font-size-h3, 16px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.findings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.finding-item {
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: var(--font-size-base, 14px);
+  color: var(--text-color);
+}
+
+.risk-indicator {
+  font-weight: 500;
+  font-size: var(--font-size-base, 14px);
+  color: var(--text-color);
+  opacity: 0.9;
+}
+
+.tooltip-content {
+  position: absolute;
+  left: calc(100% + 16px);
+  top: 0;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.tooltip-content h4 {
+  margin: 0 0 8px 0;
+  color: var(--text-color);
+  font-size: var(--font-size-h4, 14px);
+  font-weight: 600;
+}
+
+.tooltip-content p {
+  margin: 0;
+  color: var(--text-color);
+  font-size: var(--font-size-base, 13px);
+  line-height: 1.4;
+}
+
+/* Risk level styles */
+.risk-high {
+  background-color: var(--risk-high-bg);
+}
+
+.risk-medium {
+  background-color: var(--risk-medium-bg);
+}
+
+.risk-low {
+  background-color: var(--risk-low-bg);
+}
+
+/* Dark mode specific styles */
+[data-theme="dark"] .tooltip-content {
+  background-color: var(--details-bg);
+  border-color: var(--details-border);
+}
+
+[data-theme="dark"] .finding-item {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .tooltip-content {
+    transition: none;
+  }
+}
+
+/* Make sure tooltips are readable on small screens */
+@media (max-width: 768px) {
+  .tooltip-content {
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%) translateY(0);
+    margin-top: 8px;
+    width: calc(100% - 32px);
+  }
+
+  .tooltip-container:hover .tooltip-content {
+    transform: translateX(-50%) translateY(8px);
+  }
+} 
