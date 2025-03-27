@@ -1,0 +1,11 @@
+Platform,1,2,3,4,5,6,7
+Google (Control),1,2,1,0,2,0,0
+Google (Experimental),0,1,0,1,2,2,0
+Reddit (Control),0,0,2,1,0,3,0
+Reddit (Experimental),0,1,1,0,1,2,1
+Amazon (Control),0,1,2,2,0,1,0
+Amazon (Experimental),0,0,1,2,0,1,2
+DuckDuckGo (Control),0,0,1,1,0,2,2
+DuckDuckGo (Experimental),0,0,1,0,0,3,2
+Wikipedia (Control),0,1,1,0,0,2,2
+Wikipedia (Experimental),0,0,2,0,1,0,3
